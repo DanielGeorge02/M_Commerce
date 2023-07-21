@@ -26,7 +26,8 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
+    buildToolsVersion "21.1.1"
     ndkVersion flutter.ndkVersion
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
