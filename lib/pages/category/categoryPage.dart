@@ -177,7 +177,7 @@ class _CategoryPageState extends State<CategoryPage> {
             child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("Seller_req")
-                    .doc("A3YtV51DsJGf7ruoFV6x")
+                    .doc("Products")
                     .collection("item")
                     .snapshots(),
                 builder: (BuildContext context,
@@ -196,7 +196,7 @@ class _CategoryPageState extends State<CategoryPage> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 5,
                             mainAxisSpacing: 5,
-                            childAspectRatio: 0.73),
+                            childAspectRatio: 0.69),
                     itemBuilder: (BuildContext context, int index) {
                       DocumentSnapshot documentSnapshot =
                           snapshot.data!.docs[index];
@@ -227,6 +227,8 @@ class _CategoryPageState extends State<CategoryPage> {
                                               'SnameController'],
                                           quan: documentSnapshot[
                                               'QuantityController'],
+                                          type: documentSnapshot['Ptype'],
+                                          colour: documentSnapshot['Colour'],
                                         ))),
                             child: Padding(
                               padding: const EdgeInsets.only(
@@ -238,25 +240,31 @@ class _CategoryPageState extends State<CategoryPage> {
                                       BoxShadow(
                                           blurRadius: 2, color: Colors.grey)
                                     ],
-                                    borderRadius: BorderRadius.circular(13)),
+                                    borderRadius: BorderRadius.circular(17)),
                                 child: Column(
                                   children: [
-                                    Container(
-                                        height: 160,
-                                        color: Colors.white,
-                                        child: CachedNetworkImage(
-                                          imageUrl: documentSnapshot["image"],
-                                        )),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 12.0, right: 12, left: 12),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Container(
+                                            height: 200,
+                                            width: 190,
+                                            color: Colors.pink,
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  documentSnapshot["image"],
+                                              fit: BoxFit.fill,
+                                            )),
+                                      ),
+                                    ),
                                     Container(
                                       alignment: Alignment.center,
-                                      height: 55,
-                                      color: Colors.white,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 4.0),
-                                        child: Text(documentSnapshot[
-                                            "PnameController"]),
-                                      ),
+                                      height: 40,
+                                      // color: Colors.red,
+                                      child: Text(
+                                          documentSnapshot["PnameController"]),
                                     ),
                                     Expanded(
                                       child: Text.rich(

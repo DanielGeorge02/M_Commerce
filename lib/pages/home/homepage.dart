@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:m_commerce/pages/Post.dart';
+import 'package:m_commerce/pages/category/categoryPage.dart';
 import 'package:m_commerce/pages/home/chatlobby.dart';
 import 'package:m_commerce/pages/home/drawer.dart';
 import 'package:m_commerce/pages/home/Search.dart';
@@ -430,7 +431,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                             BorderRadius.circular(13)),
                                     child: Column(children: [
                                       // _buildRecomended(price: price, newprice: newprice, description: description, recimage: recimage),
-                                      Container(
+                                    
+                                    Container(
                                           height: 160,
                                           color: Colors.white,
                                           child: CachedNetworkImage(

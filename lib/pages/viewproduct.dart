@@ -20,6 +20,8 @@ class ViewProduct extends StatefulWidget {
   var email;
   var currentuser;
   var shop;
+  var type;
+  var colour;
   ViewProduct(
       {this.New,
       this.des,
@@ -30,7 +32,9 @@ class ViewProduct extends StatefulWidget {
       this.quan,
       this.email,
       this.currentuser,
-      this.shop});
+      this.shop,
+      this.type,
+      this.colour});
 
   @override
   State<ViewProduct> createState() => _ViewProductState();
