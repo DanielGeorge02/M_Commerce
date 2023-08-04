@@ -141,7 +141,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     icon: const Icon(
                       Icons.filter_alt_sharp,
                     ),
-                    label: const Text("Filter"))
+                    label: const Text("Filte"))
               ],
             ),
           ),
