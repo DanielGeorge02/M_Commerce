@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:m_commerce/pages/viewproduct.dart';
-
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -22,7 +22,6 @@ class _CartState extends State<Cart> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    int i = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -321,10 +320,10 @@ class _CartState extends State<Cart> {
                                       ),
                                     ],
                                   ),
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
-                                    children: const [
+                                    children: [
                                       Text(
                                         "Delivery Charges",
                                         style: TextStyle(fontSize: 18),
@@ -339,13 +338,13 @@ class _CartState extends State<Cart> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Total Amount",
                                         style: TextStyle(fontSize: 18),
                                       ),
                                       Text(
                                         ' \u{20B9}$tot',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 25,
                                             fontWeight: FontWeight.w600),
                                       )

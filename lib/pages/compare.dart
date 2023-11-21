@@ -21,11 +21,11 @@ class _CompareState extends State<Compare> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Color.fromARGB(146, 255, 193, 7),
+                  color: const Color.fromARGB(146, 255, 193, 7),
                 ),
                 width: double.infinity,
                 height: 70,
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -43,11 +43,11 @@ class _CompareState extends State<Compare> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Color.fromARGB(146, 255, 193, 7),
+                  color: const Color.fromARGB(146, 255, 193, 7),
                 ),
                 width: double.infinity,
                 height: 70,
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -70,11 +70,11 @@ class _CompareState extends State<Compare> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Color.fromARGB(146, 255, 193, 7),
+                  color: const Color.fromARGB(146, 255, 193, 7),
                 ),
                 width: double.infinity,
                 height: 70,
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(

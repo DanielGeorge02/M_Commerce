@@ -1,5 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:m_commerce/pages/home/home.dart';
 import 'package:m_commerce/pages/login/registerpage.dart';
@@ -36,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('email', emailcontroller.text.trim());
       Navigator.of(context).pop();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
     });
   }
 
@@ -53,9 +54,9 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   height: height * .42,
                   decoration: const BoxDecoration(),
-                  child: SafeArea(
+                  child: const SafeArea(
                     child: Column(
-                      children: const [
+                      children: [
                         Padding(
                             padding: EdgeInsets.only(
                           top: 30,
@@ -74,9 +75,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: Container(
                     height: height * 0.65,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.amber,
-                      borderRadius: const BorderRadius.only(
+                      borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(50),
                         topRight: Radius.circular(50),
                       ),
@@ -93,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                                     Colors.grey.shade500,
                                     Colors.white
                                   ]),
-                                  border: Border(
+                                  border: const Border(
                                       left: BorderSide(
                                           color: Colors.amber, width: 5))),
                               child: const Text(
@@ -113,12 +114,12 @@ class _LoginPageState extends State<LoginPage> {
                           child: TextField(
                             controller: emailcontroller,
                             decoration: InputDecoration(
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.email,
                                   color: Colors.black,
                                 ),
                                 labelText: "EMAIL ADDRESS",
-                                labelStyle: TextStyle(color: Colors.black),
+                                labelStyle: const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -140,12 +141,12 @@ class _LoginPageState extends State<LoginPage> {
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.lock,
                                   color: Colors.black,
                                 ),
                                 labelText: "PASSWORD",
-                                labelStyle: TextStyle(color: Colors.black),
+                                labelStyle: const TextStyle(color: Colors.black),
                                 focusedBorder: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.white)),
@@ -204,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Register()));
+                                          builder: (context) => const Register()));
                                 },
                                 child: const Text("Sign Up")),
                           ],

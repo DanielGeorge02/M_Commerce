@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +16,9 @@ class _LobbyState extends State<ChatLobby> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Chats'),
+          title: const Text('Chats'),
           centerTitle: true,
           toolbarHeight: height * 0.09,
           automaticallyImplyLeading: false,
@@ -37,7 +38,7 @@ class _LobbyState extends State<ChatLobby> {
               builder: (context, snapshot) {
                 var Email = FirebaseAuth.instance.currentUser!.email;
                 if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 return ListView.builder(
                     itemCount: snapshot.data!.docs.length,
@@ -59,13 +60,13 @@ class _LobbyState extends State<ChatLobby> {
                             //   Icons.person,
                             //   size: 40,
                             // ),
-                            title: Text(
+                            title: const Text(
                               // x['shop'],
                               "7 Stars Traders",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
                             ),
-                            subtitle: Text("Message"),
+                            subtitle: const Text("Message"),
                             onTap: () {
                               // print(x['shop']);
                               // print(x['user']);
@@ -84,16 +85,16 @@ class _LobbyState extends State<ChatLobby> {
                         return Card(
                           elevation: 5,
                           child: ListTile(
-                            leading: Icon(
+                            leading: const Icon(
                               Icons.person,
                               size: 40,
                             ),
                             title: Text(
                               x['user'],
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
                             ),
-                            subtitle: Text("Message"),
+                            subtitle: const Text("Message"),
                             onTap: () {
                               Navigator.push(
                                   context,

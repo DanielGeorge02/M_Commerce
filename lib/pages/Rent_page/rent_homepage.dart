@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, duplicate_ignore
+
 import 'package:animated_background/animated_background.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -7,7 +9,6 @@ import 'package:m_commerce/pages/Rent_page/rent_SeeAll.dart';
 import 'package:m_commerce/pages/Rent_page/rent_post.dart';
 
 import '../home/home.dart';
-import '../home/homepage.dart';
 
 class Rent_homepage extends StatefulWidget {
   const Rent_homepage({super.key});
@@ -76,15 +77,15 @@ class _Rent_homepageState extends State<Rent_homepage>
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home()));
+                context, MaterialPageRoute(builder: (context) => const Home()));
           },
         ),
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(30),
         )),
         toolbarHeight: height * 0.1,
-        backgroundColor: Color.fromARGB(232, 255, 255, 255),
+        backgroundColor: const Color.fromARGB(232, 255, 255, 255),
         title: GestureDetector(
           onTap: () {},
           child: Center(
@@ -96,11 +97,11 @@ class _Rent_homepageState extends State<Rent_homepage>
                   decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
-                        color: Color.fromARGB(55, 0, 0, 0),
+                        color: const Color.fromARGB(55, 0, 0, 0),
                         width: 1,
                       ),
                       borderRadius: BorderRadius.circular(40)),
-                  child: Row(children: const [
+                  child: const Row(children: [
                     Padding(
                       padding: EdgeInsets.only(left: 8.0),
                       child: Icon(
@@ -124,7 +125,7 @@ class _Rent_homepageState extends State<Rent_homepage>
       ),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
@@ -152,7 +153,7 @@ class _Rent_homepageState extends State<Rent_homepage>
           ),
           Container(
             height: 130,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.amberAccent,
             ),
             child: AnimatedBackground(

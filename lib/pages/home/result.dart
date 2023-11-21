@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:m_commerce/pages/home/Search.dart';
 
 class Result extends StatefulWidget {
@@ -30,7 +28,7 @@ class _ResultState extends State<Result> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(40)),
-                  child: Row(children: const [
+                  child: const Row(children: [
                     Padding(
                       padding: EdgeInsets.only(left: 8.0),
                       child: Icon(
@@ -60,7 +58,7 @@ class _ResultState extends State<Result> {
                 color: Colors.white,
               )),
         ),
-        body: Column(
+        body: const Column(
           children: [
             Text("Search related products"),
           ],

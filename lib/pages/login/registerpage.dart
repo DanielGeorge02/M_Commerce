@@ -1,12 +1,10 @@
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:m_commerce/pages/home/home.dart';
-import 'package:m_commerce/pages/home/homepage.dart';
 import 'package:m_commerce/pages/login/loginpage.dart';
-import 'package:m_commerce/pages/login/registerpage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -23,13 +21,11 @@ class _RegisterState extends State<Register> {
 
   late double height, width;
   senddata() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    var currentuser = _auth.currentUser;
 
-    final _CollectionReference = await FirebaseFirestore.instance
+    final CollectionReference = FirebaseFirestore.instance
         .collection("User_data")
         .doc(emailcontroller.text);
-    return _CollectionReference.set({
+    return CollectionReference.set({
       "Name": namecontroller.text,
       "email": emailcontroller.text,
       "phone number": phonecontroller.text
@@ -63,11 +59,11 @@ class _RegisterState extends State<Register> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginPage()));
+                                      builder: (context) => const LoginPage()));
                             },
-                            icon: Icon(Icons.arrow_back_ios_new_outlined)),
+                            icon: const Icon(Icons.arrow_back_ios_new_outlined)),
                       ),
-                      Align(
+                      const Align(
                         alignment: Alignment.center,
                         child: Image(
                           image: AssetImage("images/registerimage.png"),
@@ -83,9 +79,9 @@ class _RegisterState extends State<Register> {
                   ),
                   child: Container(
                     height: height * 0.77,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.amber,
-                      borderRadius: const BorderRadius.only(
+                      borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(50),
                         topRight: Radius.circular(50),
                       ),
@@ -102,7 +98,7 @@ class _RegisterState extends State<Register> {
                                     Colors.grey.shade500,
                                     Colors.white
                                   ]),
-                                  border: Border(
+                                  border: const Border(
                                       left: BorderSide(
                                           color: Colors.amber, width: 5))),
                               child: const Text(
@@ -123,12 +119,12 @@ class _RegisterState extends State<Register> {
                           child: TextField(
                             controller: namecontroller,
                             decoration: InputDecoration(
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.person,
                                   color: Colors.black,
                                 ),
                                 labelText: "NAME",
-                                labelStyle: TextStyle(color: Colors.black),
+                                labelStyle: const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -147,12 +143,12 @@ class _RegisterState extends State<Register> {
                           child: TextField(
                             controller: phonecontroller,
                             decoration: InputDecoration(
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.phone_android_outlined,
                                   color: Colors.black,
                                 ),
                                 labelText: "PHONE NUMBER",
-                                labelStyle: TextStyle(color: Colors.black),
+                                labelStyle: const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -171,12 +167,12 @@ class _RegisterState extends State<Register> {
                           child: TextField(
                             controller: emailcontroller,
                             decoration: InputDecoration(
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.email,
                                   color: Colors.black,
                                 ),
                                 labelText: "EMAIL ADDRESS",
-                                labelStyle: TextStyle(color: Colors.black),
+                                labelStyle: const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -198,12 +194,12 @@ class _RegisterState extends State<Register> {
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.lock,
                                   color: Colors.black,
                                 ),
                                 labelText: "PASSWORD",
-                                labelStyle: TextStyle(color: Colors.black),
+                                labelStyle: const TextStyle(color: Colors.black),
                                 focusedBorder: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.white)),
@@ -252,11 +248,11 @@ class _RegisterState extends State<Register> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Home()));
+                                          builder: (context) => const Home()));
                                 });
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                                    const SnackBar(
                                         content: Text(
                                             "Please fill all the fields")));
                               }

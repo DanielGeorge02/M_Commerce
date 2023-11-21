@@ -26,7 +26,7 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorScheme: ColorScheme.light(primary: Colors.black)),
+      theme: ThemeData(colorScheme: const ColorScheme.light(primary: Colors.black)),
       home: Scaffold(
         body: AnimatedSplashScreen(
             splash: Image.asset(
@@ -36,7 +36,7 @@ class _SplashState extends State<Splash> {
             duration: 2000,
             backgroundColor: Colors.white,
             splashTransition: SplashTransition.sizeTransition,
-            nextScreen: Homepage()),
+            nextScreen: const Homepage()),
       ),
     );
   }

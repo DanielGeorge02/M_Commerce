@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, file_names, non_constant_identifier_names, duplicate_ignore
+
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:m_commerce/pages/home/home.dart';
@@ -120,7 +122,7 @@ class _SeeAllState extends State<SeeAll> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 232, 230, 230),
+      backgroundColor: const Color.fromARGB(255, 232, 230, 230),
       appBar: AppBar(
         backgroundColor: Colors.amber,
         centerTitle: true,
@@ -129,7 +131,7 @@ class _SeeAllState extends State<SeeAll> {
         leading: IconButton(
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home()));
+                context, MaterialPageRoute(builder: (context) => const Home()));
           },
           icon: const Icon(
             Icons.arrow_back_ios_new,

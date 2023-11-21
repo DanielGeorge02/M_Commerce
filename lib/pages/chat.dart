@@ -1,26 +1,25 @@
+// ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, non_constant_identifier_names, no_leading_underscores_for_local_identifiers
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class Chat extends StatefulWidget {
   var chatroomkey;
   var shop;
   var user;
-  Chat({@required this.chatroomkey, @required this.shop, @required this.user});
+  Chat({super.key, @required this.chatroomkey, @required this.shop, @required this.user});
   @override
   State<Chat> createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> {
-  TextEditingController _MessageController = new TextEditingController();
+  final TextEditingController _MessageController = TextEditingController();
   final storemessage = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     UpdateDetails() {
       CollectionReference _CollectionReference =
           FirebaseFirestore.instance.collection("Chats");
@@ -32,71 +31,68 @@ class _ChatState extends State<Chat> {
       });
     }
 
-    final Size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("7 Star Traders"),
+        title: const Text("7 Star Traders"),
         centerTitle: true,
         toolbarHeight: height * 0.09,
       ),
       body: Column(
         children: [
           Expanded(
-              child: Container(
-            child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection("Chats")
-                    .doc(widget.chatroomkey)
-                    .collection("messages")
-                    .orderBy('time')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  return ListView.builder(
-                      physics: ScrollPhysics(),
-                      itemCount: snapshot.data!.docs.length,
-                      shrinkWrap: true,
-                      primary: true,
-                      itemBuilder: (context, i) {
-                        QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                        return ListTile(
-                          title: Column(
-                            crossAxisAlignment: widget.shop != x['User']
-                                ? CrossAxisAlignment.end
-                                : CrossAxisAlignment.start,
-                            children: [
-                              SafeArea(
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                          color: widget.user != x['User']
-                                              ? Colors.white
-                                              : Colors.amber,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          x['Messages'],
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ))),
-                              Text(
-                                widget.user != x['User'] ? x['User'] : "You",
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.w500),
-                              )
-                            ],
-                          ),
-                        );
-                      });
-                }),
-          )),
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection("Chats")
+                      .doc(widget.chatroomkey)
+                      .collection("messages")
+                      .orderBy('time')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return ListView.builder(
+                        physics: const ScrollPhysics(),
+                        itemCount: snapshot.data!.docs.length,
+                        shrinkWrap: true,
+                        primary: true,
+                        itemBuilder: (context, i) {
+                          QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                          return ListTile(
+                            title: Column(
+                              crossAxisAlignment: widget.shop != x['User']
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
+                              children: [
+                                SafeArea(
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            color: widget.user != x['User']
+                                                ? Colors.white
+                                                : Colors.amber,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            x['Messages'],
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ))),
+                                Text(
+                                  widget.user != x['User'] ? x['User'] : "You",
+                                  style: const TextStyle(
+                                      fontSize: 12, fontWeight: FontWeight.w500),
+                                )
+                              ],
+                            ),
+                          );
+                        });
+                  })),
           Card(
-            color: Color.fromARGB(255, 253, 240, 203),
+            color: const Color.fromARGB(255, 253, 240, 203),
             child: TextFormField(
               controller: _MessageController,
               textAlignVertical: TextAlignVertical.center,
@@ -121,7 +117,7 @@ class _ChatState extends State<Chat> {
                           _MessageController.clear();
                         }
                       },
-                      icon: Icon(Icons.send))),
+                      icon: const Icon(Icons.send))),
             ),
           ),
         ],

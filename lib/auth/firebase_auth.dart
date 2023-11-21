@@ -14,7 +14,7 @@ class Service {
         final user = FirebaseAuth.instance.currentUser;
         await user?.updateDisplayName(name.text);
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Homepage()));
+            context, MaterialPageRoute(builder: (context) => const Homepage()));
       });
     } catch (e) {
       errorBox(context, e);
@@ -27,7 +27,7 @@ class Service {
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) => {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Homepage()))
+                    MaterialPageRoute(builder: (context) => const Homepage()))
               });
     } catch (e) {
       errorBox(context, e);
@@ -39,7 +39,7 @@ class Service {
       await auth.signOut().then((value) => {
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
+                MaterialPageRoute(builder: (context) => const LoginPage()),
                 (route) => false)
           });
     } catch (e) {
@@ -52,7 +52,7 @@ class Service {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Error'),
+            title: const Text('Error'),
             content: Text(e.toString()),
           );
         });

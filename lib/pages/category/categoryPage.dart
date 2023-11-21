@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, file_names, prefer_typing_uninitialized_variables, non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,7 +12,7 @@ import 'package:m_commerce/pages/Filter.dart';
 import '../viewproduct.dart';
 
 class CategoryPage extends StatefulWidget {
-  CategoryPage({this.category, this.slider, this.city});
+  CategoryPage({super.key, this.category, this.slider, this.city});
   var category;
   var slider;
   var city;
@@ -19,12 +21,6 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   String? city;
   String? state;
   Future<void> showFilter() async {
@@ -151,15 +147,13 @@ class _CategoryPageState extends State<CategoryPage> {
             child: CarouselSlider(
                 items: widget.slider
                     .map<Widget>(
-                      (item) => Container(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Center(
-                            child: CachedNetworkImage(
-                              imageUrl: item,
-                              fit: BoxFit.cover,
-                              width: 1000,
-                            ),
+                      (item) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Center(
+                          child: CachedNetworkImage(
+                            imageUrl: item,
+                            fit: BoxFit.cover,
+                            width: 1000,
                           ),
                         ),
                       ),
@@ -290,6 +284,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               ),
                             ));
                       }
+                      return null;
                     },
                   );
                 }),

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, non_constant_identifier_names, deprecated_member_use, avoid_print
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +23,7 @@ class ViewProduct extends StatefulWidget {
   var currentuser;
   var shop;
   ViewProduct(
-      {this.New,
+      {super.key, this.New,
       this.des,
       this.addr,
       this.image,
@@ -63,7 +65,7 @@ class _ViewProductState extends State<ViewProduct>
   void initState() {
     super.initState();
     controller =
-        AnimationController(duration: Duration(seconds: 3), vsync: this);
+        AnimationController(duration: const Duration(seconds: 3), vsync: this);
     controller.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
         Navigator.pop(context);
@@ -147,7 +149,7 @@ class _ViewProductState extends State<ViewProduct>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
+                SizedBox(
                   height: 300,
                   child: LottieBuilder.asset(
                     "images/Add-to-favorite.json",
@@ -163,7 +165,7 @@ class _ViewProductState extends State<ViewProduct>
                   "Item Added to Favorite!",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 )
               ],
@@ -179,7 +181,7 @@ class _ViewProductState extends State<ViewProduct>
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70,
-        backgroundColor: Color.fromARGB(250, 245, 221, 149),
+        backgroundColor: const Color.fromARGB(250, 245, 221, 149),
         title: GestureDetector(
           onTap: () {
             Navigator.push(context,
@@ -193,7 +195,7 @@ class _ViewProductState extends State<ViewProduct>
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(40)),
-                child: Row(children: const [
+                child: const Row(children: [
                   Padding(
                     padding: EdgeInsets.only(left: 8.0),
                     child: Icon(
@@ -334,15 +336,15 @@ class _ViewProductState extends State<ViewProduct>
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20))),
                             backgroundColor:
-                                MaterialStatePropertyAll(Colors.amber)),
-                        icon: Icon(Icons.message),
-                        label: Text("Message")),
+                                const MaterialStatePropertyAll(Colors.amber)),
+                        icon: const Icon(Icons.message),
+                        label: const Text("Message")),
                     ElevatedButton.icon(
                         onPressed: () {
                           openMAp(widget.addr);
                         },
                         style: ButtonStyle(
-                            elevation: MaterialStatePropertyAll(10),
+                            elevation: const MaterialStatePropertyAll(10),
                             shape: MaterialStatePropertyAll(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20))),
@@ -353,14 +355,14 @@ class _ViewProductState extends State<ViewProduct>
                     ElevatedButton.icon(
                         onPressed: () {},
                         style: ButtonStyle(
-                            elevation: MaterialStatePropertyAll(10),
+                            elevation: const MaterialStatePropertyAll(10),
                             shape: MaterialStatePropertyAll(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20))),
                             backgroundColor:
                                 const MaterialStatePropertyAll(Colors.green)),
                         icon: const Icon(Icons.share),
-                        label: Text("Share")),
+                        label: const Text("Share")),
                   ],
                 ),
               ),
@@ -390,7 +392,7 @@ class _ViewProductState extends State<ViewProduct>
                       child: Text(
                         widget.shop!,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             letterSpacing: 0,
                             wordSpacing: 2,
                             height: 2,
@@ -406,7 +408,7 @@ class _ViewProductState extends State<ViewProduct>
                 child: Container(
                   height: 90,
                   width: width,
-                  constraints: BoxConstraints(maxHeight: double.infinity),
+                  constraints: const BoxConstraints(maxHeight: double.infinity),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: const Color.fromARGB(169, 246, 223, 156),
@@ -416,7 +418,7 @@ class _ViewProductState extends State<ViewProduct>
                     child: Text(
                       widget.addr!,
                       textAlign: TextAlign.left,
-                      style: TextStyle(
+                      style: const TextStyle(
                           letterSpacing: 0,
                           wordSpacing: 2,
                           height: 2,
@@ -442,7 +444,7 @@ class _ViewProductState extends State<ViewProduct>
                                 .size(40, 40)
                                 .roundedFull
                                 .color(Vx.randomPrimaryColor)
-                                .margin(EdgeInsets.symmetric(horizontal: 6))
+                                .margin(const EdgeInsets.symmetric(horizontal: 6))
                                 .make()),
                       ),
                     ],
@@ -468,10 +470,10 @@ class _ViewProductState extends State<ViewProduct>
                             });
                           }
                         },
-                        icon: Icon(Icons.remove)),
+                        icon: const Icon(Icons.remove)),
                     Text(
                       quantity.toString(),
-                      style: TextStyle(fontSize: 15),
+                      style: const TextStyle(fontSize: 15),
                     ),
                     IconButton(
                         onPressed: () {
@@ -485,11 +487,11 @@ class _ViewProductState extends State<ViewProduct>
                             });
                           }
                         },
-                        icon: Icon(Icons.add)),
+                        icon: const Icon(Icons.add)),
                   ]),
                   Text(
                     '(available ${widget.quan})',
-                    style: TextStyle(color: Colors.grey),
+                    style: const TextStyle(color: Colors.grey),
                   ),
                 ],
               ).box.padding(const EdgeInsets.all(8)).make(),
@@ -497,21 +499,21 @@ class _ViewProductState extends State<ViewProduct>
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
                 child: Container(
                   height: 100,
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                       maxHeight: double.infinity,
                       maxWidth: double.infinity,
                       minHeight: 100),
                   width: width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: Color.fromARGB(169, 246, 223, 156),
+                    color: const Color.fromARGB(169, 246, 223, 156),
                   ),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 10, bottom: 10),
+                          padding: const EdgeInsets.only(left: 10, bottom: 10),
                           child: "Description:"
                               .text
                               .fontWeight(FontWeight.w700)
@@ -535,15 +537,15 @@ class _ViewProductState extends State<ViewProduct>
                     itemCount: review.length,
                     itemBuilder: ((context, index) {
                       return Padding(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         child: ListTile(
-                          contentPadding: EdgeInsets.all(3),
+                          contentPadding: const EdgeInsets.all(3),
                           title: Text(
                             '${review[index]}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 18),
                           ),
-                          trailing: Icon(
+                          trailing: const Icon(
                             Icons.arrow_forward_outlined,
                             color: Colors.black,
                           ),

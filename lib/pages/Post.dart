@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, non_constant_identifier_names
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +8,6 @@ import 'package:csc_picker/csc_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lottie/lottie.dart';
-import 'MyProduct.dart';
 
 class Post extends StatefulWidget {
   const Post({super.key});
@@ -37,7 +38,7 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     controller =
-        AnimationController(duration: Duration(seconds: 3), vsync: this);
+        AnimationController(duration: const Duration(seconds: 3), vsync: this);
     controller.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
         Navigator.pop(context);
@@ -108,7 +109,7 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
         .collection("Seller_req")
         .doc("A3YtV51DsJGf7ruoFV6x")
         .collection("item")
-        .doc(FirebaseAuth.instance!.currentUser!.email);
+        .doc(FirebaseAuth.instance.currentUser!.email);
 
     return collectionreference
         .set({
@@ -137,7 +138,6 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     DropdownMenuItem<String> buildMenuItem(String items) => DropdownMenuItem(
         value: items,
         child: Text(
@@ -202,7 +202,7 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
                     textInputAction: TextInputAction.done,
                   ),
                 ),
-                Text(
+                const Text(
                     "If you are a Vendor, give the shop name below, else just give None"),
                 Padding(
                   padding: const EdgeInsets.only(top: 5, bottom: 15.0),
@@ -387,11 +387,11 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
                     textInputAction: TextInputAction.done,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 14.0),
+                const Padding(
+                  padding: EdgeInsets.only(top: 14.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "Upload Product Images",
                         style: TextStyle(
@@ -450,7 +450,7 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
                                 getgal();
                               },
                               icon: const Icon(Icons.photo)),
-                          Text("Gallery"),
+                          const Text("Gallery"),
                         ]),
                       ),
                     ),
@@ -531,18 +531,21 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
   }
 
   getcam() async {
-    // ignore: deprecated_member_use
-    var img = await image.getImage(source: ImageSource.camera);
+    final ImagePicker picker = ImagePicker();
+    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+    // var img = await image.getImage(source: ImageSource.camera);
     setState(() {
-      file = File(img!.path);
+      file = File(photo!.path);
     });
   }
 
   getgal() async {
-    // ignore: deprecated_member_use
-    var img = await image.getImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? galleryVideo =
+        await picker.pickVideo(source: ImageSource.gallery);
+    // var img = await image.getImage(source: ImageSource.gallery);
     setState(() {
-      file = File(img!.path);
+      file = File(galleryVideo!.path);
     });
   }
 }

@@ -1,11 +1,12 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable, avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class Edit extends StatefulWidget {
   var id;
   // var price;
-  Edit({required this.id});
+  Edit({super.key, required this.id});
   @override
   State<Edit> createState() => _EditState();
 }
@@ -27,7 +28,7 @@ class _EditState extends State<Edit> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController tet = new TextEditingController();
+    TextEditingController tet = TextEditingController();
 
     tet.text = widget.id["email"];
     return Scaffold(
@@ -67,7 +68,7 @@ class _EditState extends State<Edit> {
 
                             senddata();
                           },
-                          child: Text("update"))
+                          child: const Text("update"))
                     ]))
         ],
       ),

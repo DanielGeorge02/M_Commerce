@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, avoid_print
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,16 +26,14 @@ String formattedDate(timestramp) {
 class _MyProductState extends State<MyProduct> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController PnameController = TextEditingController();
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
               Navigator.popAndPushNamed(context, 'home');
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_ios_rounded,
               color: Colors.black,
             )),
@@ -79,7 +79,7 @@ class _MyProductState extends State<MyProduct> {
                         height: height,
                         child: Column(children: [
                           Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Color.fromARGB(114, 158, 158, 158),
                               // borderRadius: BorderRadius.circular(35)),
                             ),
@@ -90,10 +90,9 @@ class _MyProductState extends State<MyProduct> {
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Text(
-                                  "No. of products uploaded : " +
-                                      snapshot.data!.docs.length.toString(),
+                                  "No. of products uploaded : ${snapshot.data!.docs.length}",
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 20),
                                 ),
@@ -106,7 +105,7 @@ class _MyProductState extends State<MyProduct> {
                               child: GridView.builder(
                                   itemCount: snapshot.data!.docs.length,
                                   gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
                                           childAspectRatio: 0.52),
                                   itemBuilder: (_, index) {
@@ -138,89 +137,86 @@ class _MyProductState extends State<MyProduct> {
                                         showDialog(
                                             context: context,
                                             builder: (cpntext) {
-                                              return Container(
-                                                  child: AlertDialog(
-                                                title: Text("Remove product"),
-                                                content: SingleChildScrollView(
-                                                  child: ListBody(
-                                                    children: const <Widget>[
-                                                      Text(
-                                                          'Are you sure want to remove your product?'),
-                                                    ],
-                                                  ),
+                                              return AlertDialog(
+                                                title: const Text("Remove product"),
+                                                content: const SingleChildScrollView(
+                                              child: ListBody(
+                                                children: <Widget>[
+                                                  Text(
+                                                      'Are you sure want to remove your product?'),
+                                                ],
+                                              ),
                                                 ),
                                                 actions: <Widget>[
-                                                  TextButton(
-                                                    child: const Text('No'),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                  TextButton(
-                                                    child: const Text('Yes'),
-                                                    onPressed: () {
-                                                      FirebaseFirestore.instance
-                                                          .collection(
-                                                              "Seller_req")
-                                                          .doc(
-                                                              "A3YtV51DsJGf7ruoFV6x")
-                                                          .collection("item")
-                                                          .doc(documentSnapshot
-                                                              .id)
-                                                          .delete();
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              SnackBar(
-                                                        content: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(16),
-                                                          height: 60,
-                                                          decoration: const BoxDecoration(
-                                                              color: Colors.red,
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          20))),
-                                                          child: const Text(
-                                                            "Item removed!!",
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                        ),
-                                                        behavior:
-                                                            SnackBarBehavior
-                                                                .floating,
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        elevation: 0,
-                                                      ));
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
+                                              TextButton(
+                                                child: const Text('No'),
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop();
+                                                },
+                                              ),
+                                              TextButton(
+                                                child: const Text('Yes'),
+                                                onPressed: () {
+                                                  FirebaseFirestore.instance
+                                                      .collection(
+                                                          "Seller_req")
+                                                      .doc(
+                                                          "A3YtV51DsJGf7ruoFV6x")
+                                                      .collection("item")
+                                                      .doc(documentSnapshot
+                                                          .id)
+                                                      .delete();
+                                                  ScaffoldMessenger.of(
+                                                          context)
+                                                      .showSnackBar(
+                                                          SnackBar(
+                                                    content: Container(
+                                                      padding:
+                                                          const EdgeInsets
+                                                              .all(16),
+                                                      height: 60,
+                                                      decoration: const BoxDecoration(
+                                                          color: Colors.red,
+                                                          borderRadius: BorderRadius
+                                                              .all(Radius
+                                                                  .circular(
+                                                                      20))),
+                                                      child: const Text(
+                                                        "Item removed!!",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                    behavior:
+                                                        SnackBarBehavior
+                                                            .floating,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    elevation: 0,
+                                                  ));
+                                                  Navigator.of(context)
+                                                      .pop();
+                                                },
+                                              ),
                                                 ],
-                                              ));
+                                              );
                                             });
                                       },
                                       child: Card(
                                         elevation: 5,
                                         child: Column(
                                           children: [
-                                            Container(
-                                                child: Text(
-                                              'UPLOADED : ' +
-                                                  formattedDate(
-                                                      documentSnapshot['date']),
+                                            Text(
+                                              'UPLOADED : ${formattedDate(
+                                                  documentSnapshot['date'])}',
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w600),
-                                            )),
+                                              style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600),
+                                            ),
                                             Stack(
                                               children: [
                                                 Container(
@@ -391,7 +387,7 @@ class _MyProductState extends State<MyProduct> {
                 return Container();
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             )
           ],

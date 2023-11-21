@@ -1,10 +1,9 @@
+// ignore_for_file: file_names, use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:m_commerce/pages/home/home.dart';
-import 'package:m_commerce/pages/home/homepage.dart';
 import 'package:m_commerce/pages/login/loginpage.dart';
-import 'package:m_commerce/pages/login/registerpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VendorRegister extends StatefulWidget {
@@ -38,7 +37,7 @@ class _VendorRegisterState extends State<VendorRegister> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('email', emailcontroller.text.trim());
       Navigator.of(context).pop();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
     });
   }
 
@@ -64,11 +63,11 @@ class _VendorRegisterState extends State<VendorRegister> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginPage()));
+                                      builder: (context) => const LoginPage()));
                             },
-                            icon: Icon(Icons.arrow_back_ios_new_outlined)),
+                            icon: const Icon(Icons.arrow_back_ios_new_outlined)),
                       ),
-                      Align(
+                      const Align(
                         alignment: Alignment.center,
                         child: Image(
                           image: AssetImage("images/registerimage.png"),
@@ -84,9 +83,9 @@ class _VendorRegisterState extends State<VendorRegister> {
                   ),
                   child: Container(
                     height: height * 0.77,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.amber,
-                      borderRadius: const BorderRadius.only(
+                      borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(50),
                         topRight: Radius.circular(50),
                       ),
@@ -103,7 +102,7 @@ class _VendorRegisterState extends State<VendorRegister> {
                                     Colors.grey.shade500,
                                     Colors.white
                                   ]),
-                                  border: Border(
+                                  border: const Border(
                                       left: BorderSide(
                                           color: Colors.amber, width: 5))),
                               child: const Text(
@@ -123,12 +122,12 @@ class _VendorRegisterState extends State<VendorRegister> {
                           child: TextField(
                             controller: emailcontroller,
                             decoration: InputDecoration(
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.person,
                                   color: Colors.black,
                                 ),
                                 labelText: "NAME",
-                                labelStyle: TextStyle(color: Colors.black),
+                                labelStyle: const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -147,12 +146,12 @@ class _VendorRegisterState extends State<VendorRegister> {
                           child: TextField(
                             controller: emailcontroller,
                             decoration: InputDecoration(
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.phone_android_outlined,
                                   color: Colors.black,
                                 ),
                                 labelText: "PHONE NUMBER",
-                                labelStyle: TextStyle(color: Colors.black),
+                                labelStyle: const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -171,12 +170,12 @@ class _VendorRegisterState extends State<VendorRegister> {
                           child: TextField(
                             controller: emailcontroller,
                             decoration: InputDecoration(
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.email,
                                   color: Colors.black,
                                 ),
                                 labelText: "EMAIL ADDRESS",
-                                labelStyle: TextStyle(color: Colors.black),
+                                labelStyle: const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -198,12 +197,12 @@ class _VendorRegisterState extends State<VendorRegister> {
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.lock,
                                   color: Colors.black,
                                 ),
                                 labelText: "PASSWORD",
-                                labelStyle: TextStyle(color: Colors.black),
+                                labelStyle: const TextStyle(color: Colors.black),
                                 focusedBorder: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.white)),

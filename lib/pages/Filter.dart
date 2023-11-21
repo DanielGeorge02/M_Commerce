@@ -1,11 +1,9 @@
+// ignore_for_file: must_be_immutable, file_names, prefer_typing_uninitialized_variables, prefer_interpolation_to_compose_strings
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_options.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:m_commerce/pages/viewproduct.dart';
 
@@ -26,7 +24,7 @@ class _FilterState extends State<Filters> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.black,
               )),
@@ -49,14 +47,14 @@ class _FilterState extends State<Filters> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                const Icon(
                   Icons.location_on,
                   color: Colors.red,
                 ),
-                Text("   "),
+                const Text("   "),
                 Text(
                   widget.city.toString(),
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -72,15 +70,15 @@ class _FilterState extends State<Filters> {
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
-                    return Text('Something went wrong');
+                    return const Text('Something went wrong');
                   } else if (snapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return Text("Loading");
+                    return const Text("Loading");
                   }
 
                   return GridView.builder(
                     itemCount: snapshot.data!.docs.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         crossAxisSpacing: 5,
                         mainAxisSpacing: 20,
@@ -118,7 +116,7 @@ class _FilterState extends State<Filters> {
                               child: Container(
                                 decoration: BoxDecoration(
                                     color: Colors.white,
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                           blurRadius: 2, color: Colors.grey)
                                     ],
@@ -143,30 +141,28 @@ class _FilterState extends State<Filters> {
                                       ),
                                     ),
                                     Expanded(
-                                      child: Container(
-                                        child: Text.rich(
-                                          TextSpan(
-                                            children: [
-                                              TextSpan(
+                                      child: Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: '\u{20B9}' +
+                                                  documentSnapshot[
+                                                      "MrpController"],
+                                              style: const TextStyle(
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
+                                                  fontSize: 11,
+                                                  color: Colors.grey),
+                                            ),
+                                            TextSpan(
                                                 text: '\u{20B9}' +
                                                     documentSnapshot[
-                                                        "MrpController"],
+                                                        "PpriceController"],
                                                 style: const TextStyle(
-                                                    decoration: TextDecoration
-                                                        .lineThrough,
-                                                    fontSize: 11,
-                                                    color: Colors.grey),
-                                              ),
-                                              TextSpan(
-                                                  text: '\u{20B9}' +
-                                                      documentSnapshot[
-                                                          "PpriceController"],
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18)),
-                                            ],
-                                          ),
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                    fontSize: 18)),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -175,6 +171,7 @@ class _FilterState extends State<Filters> {
                               ),
                             ));
                       }
+                      return null;
                     },
                   );
                 }),

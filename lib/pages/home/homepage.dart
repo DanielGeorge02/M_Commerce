@@ -178,7 +178,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
               width: 350,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              child: Row(children: const [
+              child: const Row(children: [
                 Padding(
                   padding: EdgeInsets.only(left: 8.0),
                   child: Icon(
@@ -201,13 +201,13 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatLobby()));
+                    MaterialPageRoute(builder: (context) => const ChatLobby()));
               },
               icon: const Icon(Icons.chat)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
         ],
       ),
-      drawer: MainDrawer(),
+      drawer: const MainDrawer(),
 
       //                     _image != null
       //                         ? CircleAvatar(
@@ -230,11 +230,11 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
               builder: (BuildContext context,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return Text("Something went wrong");
+                  return const Text("Something went wrong");
                 }
 
                 if (snapshot.hasData && !snapshot.data!.exists) {
-                  return Text("Document does not exist");
+                  return const Text("Document does not exist");
                 }
 
                 if (snapshot.connectionState == ConnectionState.done) {
@@ -242,17 +242,17 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                       snapshot.data!.data() as Map<String, dynamic>;
                   return Column(
                     children: [
-                      Container(
+                      SizedBox(
                         height: 80,
                         child: Center(
                           child: Text.rich(
                             TextSpan(children: [
-                              TextSpan(
+                              const TextSpan(
                                   text: "Welcome ",
                                   style: TextStyle(fontSize: 30)),
                               TextSpan(
                                   text: data["Name"].toString().toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 35, color: Colors.amber))
                             ]),
                           ),
@@ -307,7 +307,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => Post()));
+                                            builder: (context) => const Post()));
                                   },
                                   child: _buildShop(photos: "sale.png")),
                               GestureDetector(
@@ -315,7 +315,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => Splash()));
+                                            builder: (context) => const Splash()));
                                   },
                                   child: _buildShop(photos: "rent.png")),
                             ],
@@ -485,7 +485,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                     SizedBox(
                       height: height * 0.4,
                     ),
-                    Center(
+                    const Center(
                       child: CircularProgressIndicator(),
                     ),
                   ],

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +75,7 @@ class _ShoppageState extends State<Shoppage> {
                                   crossAxisCount: 2,
                                   crossAxisSpacing: 5,
                                   mainAxisSpacing: 20,
-                                  childAspectRatio: 0.63),
+                                  childAspectRatio: 0.73),
                           itemBuilder: (BuildContext context, int index) {
                             DocumentSnapshot documentSnapshot =
                                 snapshot.data!.docs[index];
@@ -95,10 +97,21 @@ class _ShoppageState extends State<Shoppage> {
                                         child: CachedNetworkImage(
                                           imageUrl: documentSnapshot["image"],
                                         )),
+                                    Text(documentSnapshot["PnameController"]),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(documentSnapshot["MrpController"]),
+                                        Text(documentSnapshot[
+                                            "PpriceController"])
+                                      ],
+                                    )
                                   ],
                                 ),
                               );
                             }
+                            return null;
                           });
                     }),
               )

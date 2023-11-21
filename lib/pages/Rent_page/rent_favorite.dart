@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 
 class Rent_favorite extends StatefulWidget {
@@ -10,6 +12,6 @@ class Rent_favorite extends StatefulWidget {
 class _Rent_favoriteState extends State<Rent_favorite> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold();
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, camel_case_types, avoid_print
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -114,15 +116,15 @@ class _Rent_postState extends State<Rent_post> {
         value: items,
         child: Text(
           items,
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
         ));
     return Scaffold(
         appBar: AppBar(
-          title: Text("Product Upload Page"),
+          title: const Text("Product Upload Page"),
         ),
         body: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.all(20),
+            margin: const EdgeInsets.all(20),
             child: Column(
               children: [
                 TextField(
@@ -193,7 +195,7 @@ class _Rent_postState extends State<Rent_post> {
                   textInputAction: TextInputAction.done,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 14.0),
+                  padding: const EdgeInsets.only(top: 14.0),
                   child: TextFormField(
                     controller: AddrController1,
                     decoration: const InputDecoration(
@@ -233,12 +235,12 @@ class _Rent_postState extends State<Rent_post> {
                           onCountryChanged: (Country) {},
                           onStateChanged: (state) {
                             setState(() {
-                              this.Rstate = state;
+                              Rstate = state;
                             });
                           },
                           onCityChanged: (city) {
                             setState(() {
-                              this.Rcity = city;
+                              Rcity = city;
                             });
                           },
                           stateDropdownLabel: "State",
@@ -310,11 +312,11 @@ class _Rent_postState extends State<Rent_post> {
                     textInputAction: TextInputAction.done,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 14.0),
+                const Padding(
+                  padding: EdgeInsets.only(top: 14.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "Upload Product Images",
                         style: TextStyle(
@@ -369,7 +371,7 @@ class _Rent_postState extends State<Rent_post> {
                                 getgal();
                               },
                               icon: const Icon(Icons.photo)),
-                          Text("Gallery"),
+                          const Text("Gallery"),
                         ]),
                       ),
                     ),
@@ -396,7 +398,7 @@ class _Rent_postState extends State<Rent_post> {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 236, 212, 141),
+                      color: const Color.fromARGB(255, 236, 212, 141),
                       borderRadius: BorderRadius.circular(20)),
                   child: Column(
                     children: [
@@ -559,18 +561,21 @@ class _Rent_postState extends State<Rent_post> {
   }
 
   getcam() async {
-    // ignore: deprecated_member_use
-    var img = await image1.getImage(source: ImageSource.camera);
+    final ImagePicker picker = ImagePicker();
+    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+    // var img = await image.getImage(source: ImageSource.camera);
     setState(() {
-      file1 = File(img!.path);
+      file1 = File(photo!.path);
     });
   }
 
   getgal() async {
-    // ignore: deprecated_member_use
-    var img = await image1.getImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? galleryVideo =
+        await picker.pickVideo(source: ImageSource.gallery);
+    // var img = await image.getImage(source: ImageSource.gallery);
     setState(() {
-      file1 = File(img!.path);
+      file1 = File(galleryVideo!.path);
     });
   }
 }

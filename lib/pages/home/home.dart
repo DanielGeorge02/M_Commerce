@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:m_commerce/pages/cart_favorite/cart_and_favorite/Favorites.dart';
 import 'package:m_commerce/pages/cart_favorite/cart_and_favorite/cart.dart';
 import 'package:m_commerce/pages/home/homepage.dart';
 import 'package:m_commerce/pages/MyProduct.dart';
-import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
   late PageController pageController = PageController();
   int index = 0;
 
-  var IconDataProperty = Home();
+  var IconDataProperty = const Home();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
       body: PageView(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: <Widget>[
+        children: const <Widget>[
           Homepage(),
           Favorites(),
           Cart(),

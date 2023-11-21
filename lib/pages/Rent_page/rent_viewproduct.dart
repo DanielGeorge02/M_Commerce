@@ -1,6 +1,7 @@
+// ignore_for_file: must_be_immutable, camel_case_types, prefer_typing_uninitialized_variables
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -19,7 +20,7 @@ class Rent_viewproduct extends StatefulWidget {
   var address;
   var quantity;
   Rent_viewproduct(
-      {this.oneday,
+      {super.key, this.oneday,
       this.oneweek,
       this.twoweek,
       this.threeweek,
@@ -57,7 +58,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 70,
-          backgroundColor: Color.fromARGB(250, 245, 221, 149),
+          backgroundColor: const Color.fromARGB(250, 245, 221, 149),
           title: GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
@@ -70,7 +71,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(40)),
-                  child: Row(children: const [
+                  child: const Row(children: [
                     Padding(
                       padding: EdgeInsets.only(left: 8.0),
                       child: Icon(
@@ -121,7 +122,6 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                         .where("RPnameController", isEqualTo: widget.name)
                         .snapshots(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      String price = "";
                       if (snapshot.data == null) {
                         return const Text("No Favorite items added");
                       }
@@ -182,7 +182,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
               child: Container(
                 width: width,
                 decoration: BoxDecoration(
-                    color: Color.fromARGB(168, 228, 228, 228),
+                    color: const Color.fromARGB(168, 228, 228, 228),
                     borderRadius: BorderRadius.circular(10)),
                 child: Column(
                   children: [
@@ -197,7 +197,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: press == true
-                                        ? Color.fromARGB(255, 240, 227, 182)
+                                        ? const Color.fromARGB(255, 240, 227, 182)
                                         : Colors.amber),
                                 onPressed: () {
                                   setState(() {
@@ -247,7 +247,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: press1 == true
-                                        ? Color.fromARGB(255, 240, 227, 182)
+                                        ? const Color.fromARGB(255, 240, 227, 182)
                                         : Colors.amber),
                                 onPressed: () {
                                   setState(() {
@@ -286,7 +286,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                                     name = 'per week';
                                   });
                                 },
-                                child: Text("1 week",
+                                child: const Text("1 week",
                                     style: TextStyle(fontSize: 10))),
                           ),
                           SizedBox(
@@ -295,7 +295,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: press2 == true
-                                        ? Color.fromARGB(255, 240, 227, 182)
+                                        ? const Color.fromARGB(255, 240, 227, 182)
                                         : Colors.amber),
                                 onPressed: () {
                                   setState(() {
@@ -334,7 +334,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                                     name = 'for 2 weeks';
                                   });
                                 },
-                                child: Text("2 weeks",
+                                child: const Text("2 weeks",
                                     style: TextStyle(fontSize: 11))),
                           ),
                           SizedBox(
@@ -343,7 +343,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: press3 == true
-                                        ? Color.fromARGB(255, 240, 227, 182)
+                                        ? const Color.fromARGB(255, 240, 227, 182)
                                         : Colors.amber),
                                 onPressed: () {
                                   setState(() {
@@ -382,7 +382,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                                     name = 'for 3 weeks';
                                   });
                                 },
-                                child: Text("3 weeks",
+                                child: const Text("3 weeks",
                                     style: TextStyle(fontSize: 11))),
                           ),
                         ],
@@ -399,7 +399,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: press4 == true
-                                        ? Color.fromARGB(255, 240, 227, 182)
+                                        ? const Color.fromARGB(255, 240, 227, 182)
                                         : Colors.amber),
                                 onPressed: () {
                                   setState(() {
@@ -438,7 +438,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                                     name = 'per month';
                                   });
                                 },
-                                child: Text("1 month",
+                                child: const Text("1 month",
                                     style: TextStyle(fontSize: 11))),
                           ),
                           SizedBox(
@@ -447,7 +447,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: press5 == true
-                                        ? Color.fromARGB(255, 240, 227, 182)
+                                        ? const Color.fromARGB(255, 240, 227, 182)
                                         : Colors.amber),
                                 onPressed: () {
                                   setState(() {
@@ -486,7 +486,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                                     name = 'for 3 months';
                                   });
                                 },
-                                child: Text("3 months",
+                                child: const Text("3 months",
                                     style: TextStyle(fontSize: 11))),
                           ),
                           SizedBox(
@@ -495,7 +495,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: press6 == true
-                                        ? Color.fromARGB(255, 240, 227, 182)
+                                        ? const Color.fromARGB(255, 240, 227, 182)
                                         : Colors.amber),
                                 onPressed: () {
                                   setState(() {
@@ -534,7 +534,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                                     name = 'for 6 months';
                                   });
                                 },
-                                child: Text("6 months",
+                                child: const Text("6 months",
                                     style: TextStyle(fontSize: 11))),
                           ),
                           SizedBox(
@@ -543,7 +543,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: press7 == true
-                                        ? Color.fromARGB(255, 240, 227, 182)
+                                        ? const Color.fromARGB(255, 240, 227, 182)
                                         : Colors.amber),
                                 onPressed: () {
                                   setState(() {
@@ -582,7 +582,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                                     name = 'for 12 months';
                                   });
                                 },
-                                child: Text("12 months",
+                                child: const Text("12 months",
                                     style: TextStyle(fontSize: 10))),
                           ),
                         ],
@@ -606,31 +606,31 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20))),
                           backgroundColor:
-                              MaterialStatePropertyAll(Colors.amber)),
-                      icon: Icon(Icons.message),
+                              const MaterialStatePropertyAll(Colors.amber)),
+                      icon: const Icon(Icons.message),
                       label: const Text("Message")),
                   ElevatedButton.icon(
                       onPressed: () {},
                       style: ButtonStyle(
-                          elevation: MaterialStatePropertyAll(10),
+                          elevation: const MaterialStatePropertyAll(10),
                           shape: MaterialStatePropertyAll(
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20))),
                           backgroundColor:
-                              MaterialStatePropertyAll(Colors.red)),
-                      icon: Icon(Icons.location_on),
-                      label: Text("Location")),
+                              const MaterialStatePropertyAll(Colors.red)),
+                      icon: const Icon(Icons.location_on),
+                      label: const Text("Location")),
                   ElevatedButton.icon(
                       onPressed: () {},
                       style: ButtonStyle(
-                          elevation: MaterialStatePropertyAll(10),
+                          elevation: const MaterialStatePropertyAll(10),
                           shape: MaterialStatePropertyAll(
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20))),
                           backgroundColor:
-                              MaterialStatePropertyAll(Colors.green)),
-                      icon: Icon(Icons.share),
-                      label: Text("Share")),
+                              const MaterialStatePropertyAll(Colors.green)),
+                      icon: const Icon(Icons.share),
+                      label: const Text("Share")),
                 ],
               ),
             ),
@@ -640,7 +640,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                 height: 90,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Color.fromARGB(169, 246, 223, 156),
+                  color: const Color.fromARGB(169, 246, 223, 156),
                 ),
                 child: Row(
                   children: [
@@ -654,7 +654,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                             child: Text(
                               widget.address!,
                               textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   letterSpacing: 1,
                                   wordSpacing: 3,
                                   height: 2,
@@ -685,7 +685,7 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                               .size(40, 40)
                               .roundedFull
                               .color(Vx.randomPrimaryColor)
-                              .margin(EdgeInsets.symmetric(horizontal: 6))
+                              .margin(const EdgeInsets.symmetric(horizontal: 6))
                               .make()),
                     ),
                   ],
@@ -711,10 +711,10 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                           });
                         }
                       },
-                      icon: Icon(Icons.remove)),
+                      icon: const Icon(Icons.remove)),
                   Text(
                     quantity.toString(),
-                    style: TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                   ),
                   IconButton(
                       onPressed: () {
@@ -728,11 +728,11 @@ class _Rent_viewproductState extends State<Rent_viewproduct> {
                           });
                         }
                       },
-                      icon: Icon(Icons.add)),
+                      icon: const Icon(Icons.add)),
                 ]),
                 Text(
                   '(available ${widget.quantity})',
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ).box.padding(const EdgeInsets.all(8)).make(),

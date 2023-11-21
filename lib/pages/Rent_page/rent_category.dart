@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, camel_case_types, prefer_typing_uninitialized_variables, prefer_interpolation_to_compose_strings
+
 import 'package:animated_background/animated_background.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,12 +17,9 @@ class Rent_category extends StatefulWidget {
 
 class _Rent_categoryState extends State<Rent_category>
     with TickerProviderStateMixin {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +62,7 @@ class _Rent_categoryState extends State<Rent_category>
               child: AnimatedTextKit(
                   repeatForever: true,
                   displayFullTextOnTap: true,
-                  pause: Duration(milliseconds: 1000),
+                  pause: const Duration(milliseconds: 1000),
                   animatedTexts: [
                     RotateAnimatedText(
                       "Wanna rent " + widget.category,
@@ -176,22 +175,21 @@ class _Rent_categoryState extends State<Rent_category>
                                       ),
                                     ),
                                     Expanded(
-                                      child: Container(
-                                        child: Text.rich(
-                                          TextSpan(
-                                              text: "${'\u{20B9}' +
-                                                  documentSnapshot[
-                                                      "RonedayController"]} per day",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18)),
-                                        ),
+                                      child: Text.rich(
+                                        TextSpan(
+                                            text: "${'\u{20B9}' +
+                                                documentSnapshot[
+                                                    "RonedayController"]} per day",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18)),
                                       ),
                                     ),
                                   ],
                                 ),
                               ));
                         }
+                        return null;
                       },
                     );
                   })),

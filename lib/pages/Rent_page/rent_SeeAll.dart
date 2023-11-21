@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, file_names, camel_case_types, non_constant_identifier_names, prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:m_commerce/pages/Rent_page/rent_category.dart';
@@ -54,7 +56,7 @@ class _Rent_SeeAllState extends State<Rent_SeeAll> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 244, 231, 192),
+      backgroundColor: const Color.fromARGB(255, 244, 231, 192),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 80,
@@ -64,7 +66,7 @@ class _Rent_SeeAllState extends State<Rent_SeeAll> {
         leading: IconButton(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Rent_homepage()));
+                MaterialPageRoute(builder: (context) => const Rent_homepage()));
           },
           icon: const Icon(
             Icons.arrow_back_ios_new,
@@ -88,7 +90,7 @@ class _Rent_SeeAllState extends State<Rent_SeeAll> {
         child: Container(
           color: const Color.fromARGB(255, 244, 231, 192),
           child: GridView(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
             children: [

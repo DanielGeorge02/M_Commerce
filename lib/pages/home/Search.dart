@@ -1,11 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:m_commerce/pages/home/result.dart';
-import 'package:m_commerce/pages/viewproduct.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -75,9 +73,7 @@ class _SearchPageState extends State<SearchPage> {
                 return ListView.builder(
                     itemCount: snapshot.data?.docs.length,
                     itemBuilder: (context, index) {
-                      DocumentSnapshot documentSnapshot =
-                          snapshot.data!.docs[index];
-                      String _name =
+                      String name =
                           snapshot.data?.docs[index]['PnameController'];
                       String img = snapshot.data?.docs[index]['image'];
 
@@ -86,7 +82,7 @@ class _SearchPageState extends State<SearchPage> {
                         child: Card(
                           elevation: 3,
                           child: ListTile(
-                            title: Text(_name),
+                            title: Text(name),
                             leading: Image.network(
                               img,
                               height: 100,
@@ -97,7 +93,7 @@ class _SearchPageState extends State<SearchPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Result()));
+                                      builder: (context) => const Result()));
                             },
                           ),
                         ),

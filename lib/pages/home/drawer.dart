@@ -1,18 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:csc_picker/model/select_status_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:csc_picker/csc_picker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
-import 'dart:math';
 
 import '../login/loginpage.dart';
 
 class MainDrawer extends StatefulWidget {
-  MainDrawer({super.key});
+  const MainDrawer({super.key});
 
   @override
   State<MainDrawer> createState() => _MainDrawerState();
@@ -30,7 +25,7 @@ class _MainDrawerState extends State<MainDrawer> {
     if (image == null) return;
     final imageTemporary = File(image.path);
     setState(() {
-      this._image = imageTemporary;
+      _image = imageTemporary;
     });
   }
 
@@ -52,11 +47,11 @@ class _MainDrawerState extends State<MainDrawer> {
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (snapshot.hasError) {
-                return Text("Something went wrong");
+                return const Text("Something went wrong");
               }
 
               if (snapshot.hasData && !snapshot.data!.exists) {
-                return Text("Document does not exist");
+                return const Text("Document does not exist");
               }
 
               if (snapshot.connectionState == ConnectionState.done) {
@@ -79,14 +74,14 @@ class _MainDrawerState extends State<MainDrawer> {
                         padding: const EdgeInsets.only(top: 50.0, bottom: 20),
                         child: Text(
                           data['Name'].toString().toUpperCase(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 26, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Expanded(
                         child: Align(
                           alignment: Alignment.topCenter,
-                          child: Container(
+                          child: SizedBox(
                             height: height * 0.20,
                             width: width * 0.38,
                             child: Stack(
@@ -112,7 +107,7 @@ class _MainDrawerState extends State<MainDrawer> {
                                               .toString()
                                               .substring(0, 1)
                                               .toUpperCase(),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 50,
                                               color: Colors.black),
                                         ),
@@ -127,7 +122,7 @@ class _MainDrawerState extends State<MainDrawer> {
                                     child: IconButton(
                                       onPressed: () =>
                                           getImage(ImageSource.gallery),
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.edit,
                                         size: 28,
                                         color: Colors.black,
@@ -145,37 +140,35 @@ class _MainDrawerState extends State<MainDrawer> {
                     ]),
                   ),
                   Expanded(
-                      child: Container(
-                    child: ListView.builder(
-                        itemCount: name.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Align(
-                              child: ListTile(
-                                leading: Icon(
-                                  icon[index],
-                                  color: Colors.amber,
-                                  size: 30,
+                      child: ListView.builder(
+                          itemCount: name.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Align(
+                                child: ListTile(
+                                  leading: Icon(
+                                    icon[index],
+                                    color: Colors.amber,
+                                    size: 30,
+                                  ),
+                                  title: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(name[index],
+                                        style: const TextStyle(fontSize: 20),
+                                        textAlign: TextAlign.center),
+                                  ),
+                                  minVerticalPadding: 5,
                                 ),
-                                title: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(name[index],
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center),
-                                ),
-                                minVerticalPadding: 5,
                               ),
-                            ),
-                          );
-                        }),
-                  )),
-                  Container(
+                            );
+                          })),
+                  SizedBox(
                     height: height * 0.15,
                     child: Padding(
                       padding: const EdgeInsets.all(45.0),
                       child: ElevatedButton.icon(
-                          style: ButtonStyle(
+                          style: const ButtonStyle(
                             backgroundColor:
                                 MaterialStatePropertyAll(Colors.amber),
                           ),
@@ -184,16 +177,16 @@ class _MainDrawerState extends State<MainDrawer> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoginPage()));
+                                    builder: (context) => const LoginPage()));
                           },
-                          icon: Icon(Icons.logout_sharp),
-                          label: Text("Logout")),
+                          icon: const Icon(Icons.logout_sharp),
+                          label: const Text("Logout")),
                     ),
                   ),
                 ]);
               }
 
-              return Text("loading");
+              return const Text("loading");
             }));
   }
 }
