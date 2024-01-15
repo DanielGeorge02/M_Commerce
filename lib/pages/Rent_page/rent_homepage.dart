@@ -20,7 +20,7 @@ class Rent_homepage extends StatefulWidget {
 List carousel = [
   "https://ezo.io/wp-content/uploads/2021/11/EZR-rental-discounts-1-1024x512.jpg",
   "https://5.imimg.com/data5/SELLER/Default/2022/10/PS/LV/YJ/34867514/laptop-rental-service-500x500.jpeg",
-  "https://primexnewsnetwork.com/wp-content/uploads/2022/12/second-image-28.jpg"
+  "https://indianrenters.com/wp-content/uploads/2022/07/av-products-on-rent.webp"
 ];
 
 // ignore: camel_case_types

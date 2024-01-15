@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, camel_case_types, avoid_print
+// ignore_for_file: non_constant_identifier_names, camel_case_types, avoid_print, unrelated_type_equality_checks
 
 import 'dart:io';
 
@@ -36,7 +36,11 @@ class _Rent_postState extends State<Rent_post> {
     "Van",
     "Bus"
   ];
+  final productType = ["New", "Used"];
+  final sellerType = ["ShopKeeper", "Private Seller"];
   String? Rcategory;
+  String? seller;
+  String? type;
   String? Rstate;
   String? Rcity;
   TextEditingController SnameController1 = TextEditingController();
@@ -92,6 +96,7 @@ class _Rent_postState extends State<Rent_post> {
       "RGstController": Gstcontroller1.text,
       "email": FirebaseAuth.instance.currentUser!.email,
       "state": Rstate,
+      "type": type,
       "city": Rcity,
       "image": url
     }).then((value) {
@@ -161,38 +166,93 @@ class _Rent_postState extends State<Rent_post> {
                     textInputAction: TextInputAction.done,
                   ),
                 ),
+                // const Row(
+                //   children: [
+                //     Text(
+                //       "If you are a Private Seller, give Pan card number!",
+                //     ),
+                //   ],
+                // ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 15.0),
-                  child: TextField(
-                    controller: Gstcontroller1,
+                  padding: const EdgeInsets.only(top: 3.0),
+                  child: Container(
+                    // padding:
+                    //     const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: DropdownButton(
+                        dropdownColor: Colors.amber,
+                        hint: const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text("Seller Type"),
+                        ),
+                        isExpanded: true,
+                        value: seller,
+                        items: sellerType.map(buildMenuItem).toList(),
+                        onChanged: (value) => setState(() {
+                              seller = value;
+                              print(seller);
+                            })),
+                  ),
+                ),
+                // seller == "Private Seller"
+                //     ? Padding(
+                //         padding: const EdgeInsets.only(top: 15.0),
+                //         child: TextField(
+                //           controller: Gstcontroller1,
+                //           decoration: const InputDecoration(
+                //               prefixIcon: Icon(Icons.content_paste_sharp),
+                //               hintText: "Pan Card Number",
+                //               labelText: "Pan Card Number",
+                //               labelStyle: TextStyle(
+                //                 fontSize: 17,
+                //                 color: Colors.black,
+                //                 fontWeight: FontWeight.w400,
+                //               ),
+                //               border: OutlineInputBorder()),
+                //           keyboardType: TextInputType.name,
+                //           textInputAction: TextInputAction.done,
+                //         ),
+                //       )
+                //     : Container(),
+                seller == "ShopKeeper"
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: TextField(
+                          controller: Gstcontroller1,
+                          decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.content_paste_sharp),
+                              hintText: "GST Number",
+                              labelText: "GST Number",
+                              labelStyle: TextStyle(
+                                fontSize: 17,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              border: OutlineInputBorder()),
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.done,
+                        ),
+                      )
+                    : Container(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: TextFormField(
+                    controller: emailcontroller1,
                     decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.content_paste_sharp),
-                        hintText: "GST Number",
-                        labelText: "GST Number",
+                        prefixIcon: Icon(Icons.email_rounded),
+                        hintText: "email address",
+                        labelText: "email address",
                         labelStyle: TextStyle(
                           fontSize: 17,
                           color: Colors.black,
                           fontWeight: FontWeight.w400,
                         ),
                         border: OutlineInputBorder()),
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                   ),
-                ),
-                TextFormField(
-                  controller: emailcontroller1,
-                  decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.email_rounded),
-                      hintText: "email address",
-                      labelText: "email address",
-                      labelStyle: TextStyle(
-                        fontSize: 17,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      border: OutlineInputBorder()),
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.done,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 14.0),
@@ -262,19 +322,44 @@ class _Rent_postState extends State<Rent_post> {
                   ),
                 ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  // padding:
+                  //     const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 1),
                       borderRadius: BorderRadius.circular(10)),
                   child: DropdownButton(
-                      hint: const Text("Category"),
+                      hint: const Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: Text("Category"),
+                      ),
                       isExpanded: true,
                       value: Rcategory,
                       items: items1.map(buildMenuItem).toList(),
                       onChanged: (value) => setState(() {
                             Rcategory = value;
                           })),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 11.0),
+                  child: Container(
+                    // padding:
+                    //     const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: DropdownButton(
+                        dropdownColor: Colors.amber,
+                        hint: const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text("Type"),
+                        ),
+                        isExpanded: true,
+                        value: type,
+                        items: productType.map(buildMenuItem).toList(),
+                        onChanged: (value) => setState(() {
+                              type = value;
+                            })),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 14.0),

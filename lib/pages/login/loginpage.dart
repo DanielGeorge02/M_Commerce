@@ -37,7 +37,8 @@ class _LoginPageState extends State<LoginPage> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('email', emailcontroller.text.trim());
       Navigator.of(context).pop();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Home()));
     });
   }
 
@@ -52,16 +53,16 @@ class _LoginPageState extends State<LoginPage> {
             Column(
               children: [
                 Container(
-                  height: height * .42,
+                  height: height * .43,
                   decoration: const BoxDecoration(),
-                  child: const SafeArea(
+                  child: SafeArea(
                     child: Column(
                       children: [
                         Padding(
                             padding: EdgeInsets.only(
-                          top: 30,
+                          top: height * 0.01,
                         )),
-                        Image(
+                        const Image(
                           image: AssetImage("images/loginGif.gif"),
                           fit: BoxFit.cover,
                         ),
@@ -87,7 +88,8 @@ class _LoginPageState extends State<LoginPage> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 40, left: 25),
+                            padding: EdgeInsets.only(
+                                top: width * 0.1, left: width * 0.05),
                             child: Container(
                               decoration: BoxDecoration(
                                   gradient: LinearGradient(colors: [
@@ -105,12 +107,13 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        const Padding(
+                        Padding(
                             padding: EdgeInsets.only(
-                          top: 50,
+                          top: height * 0.07,
                         )),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: width * 0.06),
                           child: TextField(
                             controller: emailcontroller,
                             decoration: InputDecoration(
@@ -119,7 +122,8 @@ class _LoginPageState extends State<LoginPage> {
                                   color: Colors.black,
                                 ),
                                 labelText: "EMAIL ADDRESS",
-                                labelStyle: const TextStyle(color: Colors.black),
+                                labelStyle:
+                                    const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -130,11 +134,12 @@ class _LoginPageState extends State<LoginPage> {
                                 filled: true),
                           ),
                         ),
-                        const SizedBox(
-                          height: 25,
+                        SizedBox(
+                          height: height * 0.03,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: width * 0.06),
                           child: TextField(
                             controller: passwordcontroller,
                             decoration: InputDecoration(
@@ -146,7 +151,8 @@ class _LoginPageState extends State<LoginPage> {
                                   color: Colors.black,
                                 ),
                                 labelText: "PASSWORD",
-                                labelStyle: const TextStyle(color: Colors.black),
+                                labelStyle:
+                                    const TextStyle(color: Colors.black),
                                 focusedBorder: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.white)),
@@ -157,11 +163,11 @@ class _LoginPageState extends State<LoginPage> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 10, right: 17),
+                            padding: EdgeInsets.only(
+                                top: height * 0.01, right: width * 0.04),
                             child: TextButton(
                                 style: ButtonStyle(
                                   overlayColor: MaterialStateColor.resolveWith(
-                                      //no splash for textbutton
                                       (states) => Colors.transparent),
                                 ),
                                 onPressed: () {},
@@ -172,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: EdgeInsets.only(top: height * 0.01),
                           child: TextButton(
                             onPressed: () {
                               signIn();
@@ -189,9 +195,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 30),
-                          child: Divider(
+                        Padding(
+                          padding: EdgeInsets.only(top: height * 0.03),
+                          child: const Divider(
                             thickness: 0.6,
                             color: Colors.grey,
                           ),
@@ -205,7 +211,8 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const Register()));
+                                          builder: (context) =>
+                                              const Register()));
                                 },
                                 child: const Text("Sign Up")),
                           ],

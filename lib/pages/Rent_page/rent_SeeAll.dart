@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:m_commerce/pages/Rent_page/rent_Bottom.dart';
 import 'package:m_commerce/pages/Rent_page/rent_category.dart';
 import 'package:m_commerce/pages/Rent_page/rent_homepage.dart';
 
@@ -65,8 +66,10 @@ class _Rent_SeeAllState extends State<Rent_SeeAll> {
         elevation: 5,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const Rent_homepage()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const Rent_BottomNav()));
           },
           icon: const Icon(
             Icons.arrow_back_ios_new,

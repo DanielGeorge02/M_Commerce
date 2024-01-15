@@ -17,10 +17,10 @@ class Rent_category extends StatefulWidget {
 
 class _Rent_categoryState extends State<Rent_category>
     with TickerProviderStateMixin {
-
-
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -83,116 +83,136 @@ class _Rent_categoryState extends State<Rent_category>
                   ]),
             ),
           ),
+          SizedBox(
+            height: height * 0.03,
+          ),
           Expanded(
-              child: StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection("Rent_upload_products")
-                      .doc("AllProducts")
-                      .collection("item")
-                      .where("RcategoryController", isEqualTo: widget.category)
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) {
-                      return const Text('Something went wrong');
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return const Center(
-                          child: Text(
-                        "Loading...",
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.w500),
-                      ));
-                    }
-                    return GridView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 20,
-                              childAspectRatio: 0.73),
-                      itemBuilder: (BuildContext context, int index) {
-                        DocumentSnapshot documentSnapshot =
-                            snapshot.data!.docs[index];
-                        if (widget.category ==
-                            documentSnapshot['RcategoryController']) {
-                          // ignore: curly_braces_in_flow_control_structures
-                          return GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Rent_viewproduct(
-                                            oneday: documentSnapshot[
-                                                "RonedayController"],
-                                            name: documentSnapshot[
-                                                "RPnameController"],
-                                            image: documentSnapshot["image"],
-                                            address: documentSnapshot[
-                                                'RAddrController'],
-                                            quantity: documentSnapshot[
-                                                "RQuantityController"],
-                                            description: documentSnapshot[
-                                                'RPdesController'],
-                                            oneweek: documentSnapshot[
-                                                "RoneweekController"],
-                                            twoweek: documentSnapshot[
-                                                "RtwoweekController"],
-                                            threeweek: documentSnapshot[
-                                                "RthreeweekController"],
-                                            onemonth: documentSnapshot[
-                                                "RonemonthController"],
-                                            threemonth: documentSnapshot[
-                                                "RthreemonthController"],
-                                            sixmonth: documentSnapshot[
-                                                "RsixmonthController"],
-                                            twelvemonth: documentSnapshot[
-                                                "RtwelvemonthController"],
-                                            // category: documentSnapshot[
-                                            //     'RcategoryController'],
-                                          ))),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(13)),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                        height: 160,
-                                        color: Colors.white,
-                                        child: CachedNetworkImage(
-                                          imageUrl: documentSnapshot["image"],
-                                        )),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 70,
-                                      color: Colors.white,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 2.0),
-                                        child: Text(documentSnapshot[
-                                            "RPnameController"]),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text.rich(
-                                        TextSpan(
-                                            text: "${'\u{20B9}' +
-                                                documentSnapshot[
-                                                    "RonedayController"]} per day",
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18)),
-                                      ),
-                                    ),
-                                  ],
+              child: FutureBuilder<QuerySnapshot>(
+            future: FirebaseFirestore.instance
+                .collection("Rent_upload_products")
+                .doc("AllProducts")
+                .collection("item")
+                .where("RcategoryController", isEqualTo: widget.category)
+                .get(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Something went wrong');
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.amber,
+                ));
+              } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.02),
+                  child: GridView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 20,
+                      childAspectRatio: 0.75,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      DocumentSnapshot documentSnapshot =
+                          snapshot.data!.docs[index];
+                      if (widget.category ==
+                          documentSnapshot['RcategoryController']) {
+                        return GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Rent_viewproduct(
+                                oneday: documentSnapshot["RonedayController"],
+                                name: documentSnapshot["RPnameController"],
+                                image: documentSnapshot["image"],
+                                address: documentSnapshot['RAddrController'],
+                                quantity:
+                                    documentSnapshot["RQuantityController"],
+                                description:
+                                    documentSnapshot['RPdesController'],
+                                oneweek: documentSnapshot["RoneweekController"],
+                                twoweek: documentSnapshot["RtwoweekController"],
+                                threeweek:
+                                    documentSnapshot["RthreeweekController"],
+                                onemonth:
+                                    documentSnapshot["RonemonthController"],
+                                threemonth:
+                                    documentSnapshot["RthreemonthController"],
+                                sixmonth:
+                                    documentSnapshot["RsixmonthController"],
+                                twelvemonth:
+                                    documentSnapshot["RtwelvemonthController"],
+                              ),
+                            ),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
                                 ),
-                              ));
-                        }
-                        return null;
-                      },
-                    );
-                  })),
+                              ],
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: height * 0.18,
+                                  color: Colors.white,
+                                  child: CachedNetworkImage(
+                                    imageUrl: documentSnapshot["image"],
+                                  ),
+                                ),
+                                Expanded(
+                                  // color: Colors.blue,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2.0),
+                                    child: Center(
+                                      child: Text(
+                                          documentSnapshot["RPnameController"]),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  // color: Colors.brown,
+                                  height: height * 0.07,
+                                  child: Text.rich(
+                                    TextSpan(
+                                      text:
+                                          "${'\u{20B9}' + documentSnapshot["RonedayController"]} per day",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      return Container(); // Return an empty container if not matching the category
+                    },
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text('No items'),
+                );
+              }
+            },
+          )),
         ],
       ),
     );

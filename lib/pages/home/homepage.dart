@@ -51,18 +51,20 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   }
 
   Widget _buildCategory({required String name, required String photo}) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Card(
       shadowColor: Colors.grey,
       elevation: 4,
       child: SizedBox(
-        height: 160,
-        width: 180,
+        height: height * 0.2,
+        width: width * 0.45,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              height: 140,
-              width: 150,
+              height: height * 0.17,
+              width: width * 0.4,
               decoration: BoxDecoration(
                   color: Colors.deepPurple,
                   image: DecorationImage(
@@ -82,20 +84,25 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   }
 
   Widget _buildShop({required String photos}) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Card(
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         elevation: 6,
         child: Container(
-            height: 100,
-            width: 100,
+            height: height * 0.11,
+            width: width * 0.23,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
               color: Colors.white,
             ),
             child: Container(
-              margin: const EdgeInsets.only(
-                  top: 15, left: 10, right: 10, bottom: 15),
+              margin: EdgeInsets.only(
+                  top: height * 0.02,
+                  left: width * 0.03,
+                  right: width * 0.03,
+                  bottom: height * 0.02),
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(
@@ -174,21 +181,21 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                 MaterialPageRoute(builder: (context) => const SearchPage()));
           },
           child: Container(
-              height: 60,
-              width: 350,
+              height: height * 0.05,
+              width: width * 0.65,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              child: const Row(children: [
+              child: Row(children: [
                 Padding(
-                  padding: EdgeInsets.only(left: 8.0),
-                  child: Icon(
+                  padding: EdgeInsets.only(left: width * 0.02),
+                  child: const Icon(
                     Icons.search,
                     color: Colors.grey,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 8.0),
-                  child: Center(
+                  padding: EdgeInsets.only(left: width * 0.02),
+                  child: const Center(
                     child: Text(
                       "Search Products...",
                       style: TextStyle(color: Colors.grey, fontSize: 17),
@@ -208,19 +215,6 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         ],
       ),
       drawer: const MainDrawer(),
-
-      //                     _image != null
-      //                         ? CircleAvatar(
-      //                             maxRadius: 100,
-      //                             minRadius: 10,
-      //                             backgroundImage:
-      //                                 FileImage(File(_image!.path)),
-      //                           )
-      //                         : CircleAvatar(
-      //                             maxRadius: 80,
-      //                             minRadius: 70,
-      //                           ),
-
       body: WillPopScope(
         onWillPop: () => _onbackbottonpressed(context),
         child: SingleChildScrollView(
@@ -243,7 +237,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                   return Column(
                     children: [
                       SizedBox(
-                        height: 80,
+                        height: height * 0.13,
                         child: Center(
                           child: Text.rich(
                             TextSpan(children: [
@@ -265,7 +259,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                 .map(
                                   (item) => Center(
                                     child: Image.asset(item,
-                                        fit: BoxFit.cover, width: 1000),
+                                        fit: BoxFit.cover, width: width * 0.9),
                                   ),
                                 )
                                 .toList(),
@@ -277,7 +271,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                       ),
 
                       Container(
-                        height: 180,
+                        height: height * 0.2,
                         color: Colors.amberAccent,
                         child: AnimatedBackground(
                           behaviour: RandomParticleBehaviour(
@@ -307,7 +301,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const Post()));
+                                            builder: (context) =>
+                                                const Post()));
                                   },
                                   child: _buildShop(photos: "sale.png")),
                               GestureDetector(
@@ -315,7 +310,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const Splash()));
+                                            builder: (context) =>
+                                                const Splash()));
                                   },
                                   child: _buildShop(photos: "rent.png")),
                             ],
@@ -384,15 +380,16 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
 
                       //Recommended>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-                      const Padding(
-                        padding: EdgeInsets.only(left: 16.0, top: 20),
-                        child: Align(
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: width * 0.03, top: height * 0.025),
+                        child: const Align(
                             alignment: Alignment.topLeft,
                             child: Text("Recommended")),
                       ),
 
                       SizedBox(
-                        height: 950,
+                        height: height * 1.15,
                         child: GridView(
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
@@ -429,20 +426,19 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                         borderRadius:
                                             BorderRadius.circular(13)),
                                     child: Column(children: [
-                                      // _buildRecomended(price: price, newprice: newprice, description: description, recimage: recimage),
                                       Container(
-                                          height: 160,
+                                          height: height * 0.2,
                                           color: Colors.white,
                                           child: CachedNetworkImage(
                                             imageUrl: upl_image[i]["image"],
                                           )),
                                       Container(
                                         alignment: Alignment.center,
-                                        height: 75,
+                                        height: height * 0.1,
                                         color: Colors.white,
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 4.0),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: width * 0.05),
                                           child: Text(
                                               upl_image[i]["PnameController"]),
                                         ),
@@ -497,7 +493,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 30.0),
+            padding: EdgeInsets.only(left: width * 0.1),
             child: FloatingActionButton.extended(
                 heroTag: "btn1",
                 focusColor: Colors.amber,
@@ -516,7 +512,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                 )),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 35.0),
+            padding: EdgeInsets.only(left: width * 0.1),
             child: FloatingActionButton.extended(
               heroTag: "btn2",
               elevation: 30,

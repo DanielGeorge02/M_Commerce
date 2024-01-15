@@ -33,175 +33,201 @@ class _FavoritesState extends State<Favorites> {
             )),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 15.0),
-        child: StreamBuilder(
-            stream: FirebaseFirestore.instance
+          padding: const EdgeInsets.only(top: 15.0),
+          child: FutureBuilder<QuerySnapshot>(
+            future: FirebaseFirestore.instance
                 .collection("Favorite_item")
                 .doc(FirebaseAuth.instance.currentUser!.email)
                 .collection("item")
-                .snapshots(),
+                .get(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               try {
-                if (snapshot.data!.docs.isEmpty) {
-                  return const Center(
-                    child: Text('No items'),
-                  );
-                } else {
-                  return SizedBox(
-                    height: height,
-                    child: GridView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (_, index) {
-                        DocumentSnapshot documentSnapshot =
-                            snapshot.data!.docs[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                    return SizedBox(
+                      height: height,
+                      child: GridView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (_, index) {
+                          DocumentSnapshot documentSnapshot =
+                              snapshot.data!.docs[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ViewProduct(
-                                          New: documentSnapshot[
-                                              'PpriceController'],
-                                          des: documentSnapshot[
-                                              'PdesController'],
-                                          image: documentSnapshot['image'],
-                                          name: documentSnapshot[
-                                              'PnameController'],
-                                          old:
-                                              documentSnapshot['MrpController'],
-                                          addr: documentSnapshot[
-                                              'AddrController'],
-                                        )));
-                          },
-                          child: Card(
-                            elevation: 5,
-                            child: Column(children: [
-                              Stack(children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: CachedNetworkImageProvider(
-                                            documentSnapshot['image'],
-                                          ),
-                                          fit: BoxFit.contain)),
+                                  builder: (context) => ViewProduct(),
                                 ),
-                                IconButton(
-                                    padding: const EdgeInsets.only(left: 150),
-                                    onPressed: () {
-                                      FirebaseFirestore.instance
-                                          .collection("Favorite_item")
-                                          .doc(FirebaseAuth
-                                              .instance.currentUser!.email)
-                                          .collection("item")
-                                          .doc(documentSnapshot.id)
-                                          .delete();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Container(
-                                          padding: const EdgeInsets.all(16),
-                                          height: 60,
-                                          decoration: const BoxDecoration(
-                                              color: Colors.red,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20))),
-                                          child: const Text(
-                                            "Item removed from Favorite!!",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
+                              );
+                            },
+                            child: Card(
+                              elevation: 5,
+                              child: Column(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      Container(
+                                        height: 200,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: CachedNetworkImageProvider(
+                                              documentSnapshot['image'],
+                                            ),
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
-                                        behavior: SnackBarBehavior.floating,
-                                        backgroundColor: Colors.transparent,
-                                        elevation: 0,
-                                      ));
-                                    },
-                                    icon: const Icon(Icons.cancel)),
-                              ]),
-                              Expanded(
-                                  child: Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8),
-                                      child: Text(
-                                        documentSnapshot['PnameController']
-                                                    .length >
-                                                50
-                                            ? documentSnapshot[
-                                                        'PnameController']
-                                                    .substring(0, 20) +
-                                                '...'
-                                            : documentSnapshot[
-                                                'PnameController'],
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w600),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 48,
-                                      width: 300,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          documentSnapshot['PdesController']
-                                                      .length >
-                                                  50
-                                              ? documentSnapshot[
-                                                          'PdesController']
-                                                      .substring(0, 53) +
-                                                  '...'
-                                              : documentSnapshot[
-                                                  'PdesController'],
-                                          textAlign: TextAlign.left,
-                                        ),
+                                      IconButton(
+                                        padding:
+                                            const EdgeInsets.only(left: 150),
+                                        onPressed: () {
+                                          FirebaseFirestore.instance
+                                              .collection("Favorite_item")
+                                              .doc(FirebaseAuth
+                                                  .instance.currentUser!.email)
+                                              .collection("item")
+                                              .doc(documentSnapshot.id)
+                                              .delete();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Container(
+                                                padding:
+                                                    const EdgeInsets.all(16),
+                                                height: 60,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(20),
+                                                  ),
+                                                ),
+                                                child: const Text(
+                                                  "Item removed from Favorite!!",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              elevation: 0,
+                                            ),
+                                          );
+                                        },
+                                        icon: const Icon(Icons.cancel),
                                       ),
-                                    ),
-                                    Text.rich(TextSpan(children: [
-                                      TextSpan(
-                                          // ignore: prefer_interpolation_to_compose_strings
-                                          text: '\u{20B9}' +
-                                              documentSnapshot['MrpController'],
-                                          style: const TextStyle(
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              fontSize: 13,
-                                              color: Colors.grey)),
-                                      TextSpan(
-                                          // ignore: prefer_interpolation_to_compose_strings
-                                          text: ' \u{20B9}' +
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 8.0,
+                                              right: 8,
+                                            ),
+                                            child: Text(
                                               documentSnapshot[
-                                                  'PpriceController'],
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                              color: Color.fromARGB(
-                                                  255, 72, 179, 75))),
-                                    ])),
-                                  ],
-                                ),
-                              )),
-                            ]),
-                          ),
-                        );
-                      },
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.55,
-                              crossAxisSpacing: 5),
-                    ),
-                  );
+                                                              'PnameController']
+                                                          .length >
+                                                      50
+                                                  ? documentSnapshot[
+                                                              'PnameController']
+                                                          .substring(0, 20) +
+                                                      '...'
+                                                  : documentSnapshot[
+                                                      'PnameController'],
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 48,
+                                            width: 300,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                documentSnapshot[
+                                                                'PdesController']
+                                                            .length >
+                                                        50
+                                                    ? documentSnapshot[
+                                                                'PdesController']
+                                                            .substring(0, 53) +
+                                                        '...'
+                                                    : documentSnapshot[
+                                                        'PdesController'],
+                                                textAlign: TextAlign.left,
+                                              ),
+                                            ),
+                                          ),
+                                          Text.rich(
+                                            TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: '\u{20B9}' +
+                                                      documentSnapshot[
+                                                          'MrpController'],
+                                                  style: const TextStyle(
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                    fontSize: 13,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: ' \u{20B9}' +
+                                                      documentSnapshot[
+                                                          'PpriceController'],
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                    color: Color.fromARGB(
+                                                        255, 72, 179, 75),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.55,
+                          crossAxisSpacing: 5,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return const Center(
+                      child: Text('No items'),
+                    );
+                  }
                 }
+                // Handle other connection states
+                return CircularProgressIndicator(); // Or any other loading indicator
               } catch (e) {
                 print(e);
+                return Container();
               }
-              return Container();
-            }),
-      ),
+            },
+          )),
     );
   }
 }

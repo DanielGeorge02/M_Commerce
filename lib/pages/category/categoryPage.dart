@@ -24,6 +24,7 @@ class _CategoryPageState extends State<CategoryPage> {
   String? city;
   String? state;
   Future<void> showFilter() async {
+    double width = MediaQuery.of(context).size.width;
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -43,7 +44,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       style: TextStyle(fontSize: 15),
                     )),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(width * 0.05),
                   child: CSCPicker(
                     layout: Layout.vertical,
                     defaultCountry: CscCountry.India,
@@ -91,8 +92,13 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
+  CollectionReference users =
+      FirebaseFirestore.instance.collection("Seller_req");
+
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -104,7 +110,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 color: Colors.black,
               )),
           automaticallyImplyLeading: false,
-          toolbarHeight: 70,
+          toolbarHeight: height * 0.1,
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 5,
@@ -117,7 +123,7 @@ class _CategoryPageState extends State<CategoryPage> {
         ),
         body: Column(children: [
           Container(
-            height: 80,
+            height: height * 0.1,
             color: const Color.fromARGB(255, 209, 207, 207),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -142,13 +148,13 @@ class _CategoryPageState extends State<CategoryPage> {
             ),
           ),
           SizedBox(
-            height: 200,
-            width: 410,
+            height: height * 0.23,
+            width: width * 1,
             child: CarouselSlider(
                 items: widget.slider
                     .map<Widget>(
                       (item) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        padding: EdgeInsets.symmetric(vertical: width * 0.05),
                         child: Center(
                           child: CachedNetworkImage(
                             imageUrl: item,
@@ -164,25 +170,20 @@ class _CategoryPageState extends State<CategoryPage> {
                   enlargeCenterPage: true,
                 )),
           ),
-          const SizedBox(
-            height: 20,
+          SizedBox(
+            height: height * 0.03,
           ),
           Expanded(
-            child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("Seller_req")
-                    .doc("A3YtV51DsJGf7ruoFV6x")
-                    .collection("item")
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('Something went wrong');
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const Text("Loading");
-                  }
-
+            child: FutureBuilder<QuerySnapshot>(
+              future: users.doc("Products").collection("item").get(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text("No videos Uplaoded"));
+                } else {
                   return GridView.builder(
                     itemCount: snapshot.data!.docs.length,
                     gridDelegate:
@@ -196,7 +197,6 @@ class _CategoryPageState extends State<CategoryPage> {
                           snapshot.data!.docs[index];
                       if (widget.category ==
                           documentSnapshot['categoryController']) {
-                        // ignore: curly_braces_in_flow_control_structures
                         return GestureDetector(
                             onTap: () => Navigator.push(
                                 context,
@@ -223,8 +223,11 @@ class _CategoryPageState extends State<CategoryPage> {
                                               'QuantityController'],
                                         ))),
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 8.0, left: 2, right: 2),
+                              padding: EdgeInsets.only(
+                                top: height * 0.01,
+                                left: width * 0.02,
+                                right: width * 0.02,
+                              ),
                               child: Container(
                                 decoration: BoxDecoration(
                                     color: Colors.white,
@@ -236,18 +239,18 @@ class _CategoryPageState extends State<CategoryPage> {
                                 child: Column(
                                   children: [
                                     Container(
-                                        height: 160,
+                                        height: height * 0.2,
                                         color: Colors.white,
                                         child: CachedNetworkImage(
                                           imageUrl: documentSnapshot["image"],
                                         )),
                                     Container(
                                       alignment: Alignment.center,
-                                      height: 55,
+                                      height: height * 0.08,
                                       color: Colors.white,
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 4.0),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: width * 0.03),
                                         child: Text(documentSnapshot[
                                             "PnameController"]),
                                       ),
@@ -287,7 +290,9 @@ class _CategoryPageState extends State<CategoryPage> {
                       return null;
                     },
                   );
-                }),
+                }
+              },
+            ),
           )
         ]));
   }
