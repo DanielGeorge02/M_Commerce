@@ -23,6 +23,7 @@ class ViewProduct extends StatefulWidget {
   var currentuser;
   var shop;
   var type;
+  List<dynamic> color;
   ViewProduct(
       {super.key,
       this.New,
@@ -35,6 +36,7 @@ class ViewProduct extends StatefulWidget {
       this.email,
       this.currentuser,
       this.type,
+      required this.color,
       this.shop});
 
   @override
@@ -117,6 +119,20 @@ class _ViewProductState extends State<ViewProduct>
     }).then((value) {
       showFavoriteDialog();
     });
+  }
+
+  Color getColorFromString(String colorString) {
+    // Remove 'Color(' and ')' from the string
+    String hexString = colorString.replaceAll('Color(', '').replaceAll(')', '');
+
+    // Remove '0x' prefix if present
+    if (hexString.startsWith('0x')) {
+      hexString = hexString.substring(2);
+    }
+
+    // Parse the hexadecimal value and create a Color object
+    int hexColorValue = int.parse(hexString, radix: 16);
+    return Color(hexColorValue);
   }
 
   void showCartDialog() => showDialog(
@@ -443,16 +459,16 @@ class _ViewProductState extends State<ViewProduct>
                           child:
                               "Color:".text.color(Colors.grey.shade700).make(),
                         ),
-                        Row(
-                          children: List.generate(
-                              3,
-                              (index) => VxBox()
-                                  .size(40, 40)
-                                  .roundedFull
-                                  .color(Vx.randomPrimaryColor)
-                                  .margin(EdgeInsets.symmetric(
-                                      horizontal: width * 0.01))
-                                  .make()),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: List.generate(
+                                widget.color.length,
+                                (index) => CircleAvatar(
+                                      backgroundColor: getColorFromString(
+                                          widget.color[index]),
+                                    )),
+                          ),
                         ),
                       ],
                     ).box.padding(EdgeInsets.all(height * 0.01)).make(),

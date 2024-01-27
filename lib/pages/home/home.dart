@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
         buttonBackgroundColor: Colors.amber,
         index: index,
         height: 65,
-        backgroundColor: Colors.white, //backgroundcolor of curve
+        backgroundColor: Colors.transparent,
         color: Colors.amber,
         items: const [
           Icon(

@@ -203,6 +203,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ViewProduct(
+                                        color: documentSnapshot['Colour'],
                                         currentuser: FirebaseAuth
                                             .instance.currentUser!.email
                                             .toString(),

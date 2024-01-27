@@ -309,74 +309,22 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
                         },
                         style: const ButtonStyle(
                             backgroundColor:
-                                MaterialStatePropertyAll(Colors.red)),
-                        child: const Text("Check"),
+                                MaterialStatePropertyAll(Colors.black)),
+                        child: const Text("Verify",
+                            style: TextStyle(color: Colors.white)),
                       ),
                       if (success && count > 0)
-                        const Icon(Icons.check)
+                        const Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        )
                       else if (!success && count > 0)
-                        const Icon(Icons.cancel)
+                        const Icon(
+                          Icons.cancel,
+                          color: Colors.red,
+                        )
                       else
                         const Text(""),
-                      // success && count > 0 ? Icon(Icons.check) : Text(""),
-
-                      // FutureBuilder(
-                      //   builder: (ctx, jsondata) {
-                      //     // Checking if future is resolved or not
-                      //     if (jsondata.connectionState ==
-                      //         ConnectionState.done) {
-                      //       // If we got an error
-                      //       if (jsondata.hasError) {
-                      //         return Center(
-                      //           child: Text(
-                      //             '${jsondata.error} occurred',
-                      //             style: TextStyle(fontSize: 18),
-                      //           ),
-                      //         );
-                      //       } else if (jsondata.hasData) {
-                      //         if (success == false) {
-                      //           Future.delayed(Duration.zero, () {
-                      //             showDialog(
-                      //               context: context,
-                      //               builder: (ctx) => AlertDialog(
-                      //                 title: const Text("Alert Dialog Box"),
-                      //                 content: const Text(
-                      //                     "You have raised a Alert Dialog Box"),
-                      //                 actions: <Widget>[
-                      //                   TextButton(
-                      //                     onPressed: () {
-                      //                       Navigator.of(ctx).pop();
-                      //                     },
-                      //                     child: Container(
-                      //                       color: Colors.green,
-                      //                       padding: const EdgeInsets.all(14),
-                      //                       child: const Text("okay"),
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             );
-                      //           });
-                      //         } else {
-                      //           Icon(Icons.check);
-                      //         }
-                      //       }
-                      //     }
-
-                      //     // Displaying LoadingSpinner to indicate waiting state
-                      //     return Center(
-                      //       child: CircularProgressIndicator(),
-                      //     );
-                      //   },
-
-                      //   // Future that needs to be resolved
-                      //   // inorder to display something on the Canvas
-                      //   future: getRequest(),
-                      // ),
-                      // if (success == true)
-                      //   const Icon(Icons.check)
-                      // else if (success == false)
-                      //   showerror()
                     ],
                   ),
                 ),

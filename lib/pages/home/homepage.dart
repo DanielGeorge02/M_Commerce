@@ -406,6 +406,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ViewProduct(
+                                              color: [],
                                               New: upl_image[i]
                                                   ["PpriceController"],
                                               des: upl_image[i]

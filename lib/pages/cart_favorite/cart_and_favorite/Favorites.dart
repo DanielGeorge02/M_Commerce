@@ -57,7 +57,9 @@ class _FavoritesState extends State<Favorites> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ViewProduct(),
+                                  builder: (context) => ViewProduct(
+                                    color: documentSnapshot['Colour'],
+                                  ),
                                 ),
                               );
                             },

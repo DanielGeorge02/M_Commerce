@@ -84,6 +84,8 @@ class _CartState extends State<Cart> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       ViewProduct(
+                                                        color: documentSnapshot[
+                                                            'Colour'],
                                                         New: documentSnapshot[
                                                             'PpriceController'],
                                                         des: documentSnapshot[
@@ -207,7 +209,8 @@ class _CartState extends State<Cart> {
                                                                   content:
                                                                       Container(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             16),
                                                                     height: 60,
                                                                     decoration: const BoxDecoration(

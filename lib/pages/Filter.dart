@@ -54,7 +54,8 @@ class _FilterState extends State<Filters> {
                 const Text("   "),
                 Text(
                   widget.city.toString(),
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -78,11 +79,12 @@ class _FilterState extends State<Filters> {
 
                   return GridView.builder(
                     itemCount: snapshot.data!.docs.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 5,
-                        mainAxisSpacing: 20,
-                        childAspectRatio: 0.63),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 20,
+                            childAspectRatio: 0.63),
                     itemBuilder: (BuildContext context, int index) {
                       DocumentSnapshot documentSnapshot =
                           snapshot.data!.docs[index];
@@ -97,6 +99,7 @@ class _FilterState extends State<Filters> {
                                           currentuser: FirebaseAuth
                                               .instance.currentUser!.email
                                               .toString(),
+                                          color: documentSnapshot['Colour'],
                                           email: documentSnapshot["email"],
                                           New: documentSnapshot[
                                               'PpriceController'],
@@ -159,8 +162,7 @@ class _FilterState extends State<Filters> {
                                                     documentSnapshot[
                                                         "PpriceController"],
                                                 style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     fontSize: 18)),
                                           ],
                                         ),

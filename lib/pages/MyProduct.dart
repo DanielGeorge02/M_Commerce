@@ -119,6 +119,8 @@ class _MyProductState extends State<MyProduct> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     ViewProduct(
+                                                      color: documentSnapshot[
+                                                          'Colour'],
                                                       New: documentSnapshot[
                                                           'PpriceController'],
                                                       des: documentSnapshot[
