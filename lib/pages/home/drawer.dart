@@ -30,7 +30,6 @@ class _MainDrawerState extends State<MainDrawer> {
   }
 
   List icon = [
-    Icons.person,
     Icons.email_rounded,
     Icons.location_on,
     Icons.phone_android_rounded,
@@ -157,6 +156,10 @@ class _MainDrawerState extends State<MainDrawer> {
                                     child: Text(name[index],
                                         style: const TextStyle(fontSize: 20),
                                         textAlign: TextAlign.center),
+                                  ),
+                                  trailing: IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.edit),
                                   ),
                                   minVerticalPadding: 5,
                                 ),

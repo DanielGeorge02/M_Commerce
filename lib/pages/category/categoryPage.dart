@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:m_commerce/pages/Filter.dart';
 
@@ -202,26 +203,24 @@ class _CategoryPageState extends State<CategoryPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ViewProduct(
-                                          currentuser: FirebaseAuth
-                                              .instance.currentUser!.email
-                                              .toString(),
-                                          email: documentSnapshot["email"],
-                                          New: documentSnapshot[
-                                              'PpriceController'],
-                                          des: documentSnapshot[
-                                              'PdesController'],
-                                          image: documentSnapshot['image'],
-                                          name: documentSnapshot[
-                                              'PnameController'],
-                                          old:
-                                              documentSnapshot['MrpController'],
-                                          addr: documentSnapshot[
-                                              'AddrController'],
-                                          shop: documentSnapshot[
-                                              'SnameController'],
-                                          quan: documentSnapshot[
-                                              'QuantityController'],
-                                        ))),
+                                        currentuser: FirebaseAuth
+                                            .instance.currentUser!.email
+                                            .toString(),
+                                        email: documentSnapshot["email"],
+                                        New: documentSnapshot[
+                                            'PpriceController'],
+                                        des: documentSnapshot['PdesController'],
+                                        image: documentSnapshot['image'],
+                                        name:
+                                            documentSnapshot['PnameController'],
+                                        old: documentSnapshot['MrpController'],
+                                        addr:
+                                            documentSnapshot['AddrController'],
+                                        shop:
+                                            documentSnapshot['SnameController'],
+                                        quan: documentSnapshot[
+                                            'QuantityController'],
+                                        type: documentSnapshot['Ptype']))),
                             child: Padding(
                               padding: EdgeInsets.only(
                                 top: height * 0.01,
@@ -239,10 +238,21 @@ class _CategoryPageState extends State<CategoryPage> {
                                 child: Column(
                                   children: [
                                     Container(
-                                        height: height * 0.2,
+                                        height: height * 0.18,
                                         color: Colors.white,
-                                        child: CachedNetworkImage(
-                                          imageUrl: documentSnapshot["image"],
+                                        child: Stack(
+                                          alignment: Alignment.topRight,
+                                          children: [
+                                            CachedNetworkImage(
+                                              imageUrl:
+                                                  documentSnapshot["image"],
+                                            ),
+                                            documentSnapshot["Ptype"] == 'New'
+                                                ? SvgPicture.asset(
+                                                    "images/new.svg")
+                                                : SvgPicture.asset(
+                                                    "images/used.svg")
+                                          ],
                                         )),
                                     Container(
                                       alignment: Alignment.center,

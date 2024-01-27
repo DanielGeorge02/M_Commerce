@@ -1,13 +1,18 @@
-// ignore_for_file: file_names, non_constant_identifier_names
+// ignore_for_file: file_names, non_constant_identifier_names, prefer_typing_uninitialized_variables, avoid_print
 
+import 'dart:convert';
 import 'dart:io';
+// import 'dart:js_interop';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:csc_picker/csc_picker.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lottie/lottie.dart';
+// import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:http/http.dart' as http;
 
 class Post extends StatefulWidget {
   const Post({super.key});
@@ -18,6 +23,21 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> with SingleTickerProviderStateMixin {
   File? file;
+  var colour = 0;
+  Color currentColor = Colors.green;
+  bool no_color = false;
+  List<Color> currentColors = [Colors.yellow, Colors.red];
+
+  //colors for loop
+  List<String> colors(List ColList) {
+    List<String> Col = [];
+    for (int i = 0; i < ColList.length; i++) {
+      Col.add(ColList[i].toString());
+    }
+    return Col;
+  }
+
+  String? product_type;
   ImagePicker image = ImagePicker();
   late AnimationController controller;
   final items = [
@@ -34,6 +54,8 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
     "Auto spare Parts",
     "Laptops"
   ];
+  void changeColor(Color color) => setState(() => currentColor = color);
+
   @override
   void initState() {
     super.initState();
@@ -107,7 +129,7 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
     url = await snapshot.ref.getDownloadURL();
     final collectionreference = FirebaseFirestore.instance
         .collection("Seller_req")
-        .doc("A3YtV51DsJGf7ruoFV6x")
+        .doc("Products")
         .collection("item")
         .doc(FirebaseAuth.instance.currentUser!.email);
 
@@ -125,6 +147,8 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
           "emailController": emailcontroller.text,
           "QuantityController": QuantityController.text,
           "GstController": Gstcontroller.text,
+          "Ptype": product_type,
+          "Colour": colors(chosenColor),
           "state": state,
           "email": FirebaseAuth.instance.currentUser!.email,
           "city": city,
@@ -135,9 +159,36 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
         .then((value) => Navigator.of(context).pop());
   }
 
+  List chosenColor = [];
+  bool success = true;
+  int count = 0;
+  var jsondata;
+
+  //34ARPPM1668N1Z3
+
+  getRequest() async {
+    var url = Uri.https(
+      'gst-return-status.p.rapidapi.com',
+      '/free/gstin/$Gstcontroller',
+    );
+    var headers = {
+      'Content-Type': 'application/json',
+      'X-RapidAPI-Key': '24d87c3e7fmshcd2f1f1625659c5p12eb66jsn76a1e6dca6df',
+      'X-RapidAPI-Host': 'gst-return-status.p.rapidapi.com'
+    };
+    final response = await http.get(url, headers: headers);
+
+    jsondata = jsonDecode(response.body);
+    success = jsondata["success"];
+    print(success.runtimeType);
+    print(success);
+    return success;
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     DropdownMenuItem<String> buildMenuItem(String items) => DropdownMenuItem(
         value: items,
         child: Text(
@@ -190,7 +241,7 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
                           color: Colors.amber,
                         ),
                         hintText: "Phone Numer",
-                        labelText: "phone Number",
+                        labelText: "Phone Number",
                         labelStyle: TextStyle(
                           fontSize: 17,
                           color: Colors.black,
@@ -229,23 +280,104 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
                     "If you are a Vendor, give the GST Number below, else just give None"),
                 Padding(
                   padding: const EdgeInsets.only(top: 5, bottom: 15.0),
-                  child: TextField(
-                    controller: Gstcontroller,
-                    decoration: const InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.content_paste_sharp,
-                          color: Colors.amber,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: Gstcontroller,
+                          decoration: const InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.content_paste_sharp,
+                                color: Colors.amber,
+                              ),
+                              hintText: "GST Number",
+                              labelText: "GST Number",
+                              labelStyle: TextStyle(
+                                fontSize: 17,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              border: OutlineInputBorder()),
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.done,
                         ),
-                        hintText: "GST Number",
-                        labelText: "GST Number",
-                        labelStyle: TextStyle(
-                          fontSize: 17,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        border: OutlineInputBorder()),
-                    keyboardType: TextInputType.name,
-                    textInputAction: TextInputAction.done,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          count++;
+                          getRequest();
+                        },
+                        style: const ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.red)),
+                        child: const Text("Check"),
+                      ),
+                      if (success && count > 0)
+                        const Icon(Icons.check)
+                      else if (!success && count > 0)
+                        const Icon(Icons.cancel)
+                      else
+                        const Text(""),
+                      // success && count > 0 ? Icon(Icons.check) : Text(""),
+
+                      // FutureBuilder(
+                      //   builder: (ctx, jsondata) {
+                      //     // Checking if future is resolved or not
+                      //     if (jsondata.connectionState ==
+                      //         ConnectionState.done) {
+                      //       // If we got an error
+                      //       if (jsondata.hasError) {
+                      //         return Center(
+                      //           child: Text(
+                      //             '${jsondata.error} occurred',
+                      //             style: TextStyle(fontSize: 18),
+                      //           ),
+                      //         );
+                      //       } else if (jsondata.hasData) {
+                      //         if (success == false) {
+                      //           Future.delayed(Duration.zero, () {
+                      //             showDialog(
+                      //               context: context,
+                      //               builder: (ctx) => AlertDialog(
+                      //                 title: const Text("Alert Dialog Box"),
+                      //                 content: const Text(
+                      //                     "You have raised a Alert Dialog Box"),
+                      //                 actions: <Widget>[
+                      //                   TextButton(
+                      //                     onPressed: () {
+                      //                       Navigator.of(ctx).pop();
+                      //                     },
+                      //                     child: Container(
+                      //                       color: Colors.green,
+                      //                       padding: const EdgeInsets.all(14),
+                      //                       child: const Text("okay"),
+                      //                     ),
+                      //                   ),
+                      //                 ],
+                      //               ),
+                      //             );
+                      //           });
+                      //         } else {
+                      //           Icon(Icons.check);
+                      //         }
+                      //       }
+                      //     }
+
+                      //     // Displaying LoadingSpinner to indicate waiting state
+                      //     return Center(
+                      //       child: CircularProgressIndicator(),
+                      //     );
+                      //   },
+
+                      //   // Future that needs to be resolved
+                      //   // inorder to display something on the Canvas
+                      //   future: getRequest(),
+                      // ),
+                      // if (success == true)
+                      //   const Icon(Icons.check)
+                      // else if (success == false)
+                      //   showerror()
+                    ],
                   ),
                 ),
                 TextFormField(
@@ -337,12 +469,50 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
                   ),
                 ),
                 Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: const Color.fromARGB(255, 249, 217, 121),
+                    ),
+                    padding: const EdgeInsets.all(10),
+                    child: Column(children: [
+                      const Text(
+                        "Select Product Type",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w800),
+                      ),
+                      RadioListTile(
+                        activeColor: Colors.black,
+                        title: const Text("New Product"),
+                        value: "New",
+                        groupValue: product_type,
+                        onChanged: (value) {
+                          setState(() {
+                            product_type = value.toString();
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        activeColor: Colors.black,
+                        title: const Text("Old Product"),
+                        value: "Old",
+                        groupValue: product_type,
+                        onChanged: (value) {
+                          setState(() {
+                            product_type = value.toString();
+                          });
+                        },
+                      ),
+                    ])),
+                Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 1),
                       borderRadius: BorderRadius.circular(10)),
                   child: DropdownButton(
+                      dropdownColor: const Color.fromARGB(255, 249, 217, 121),
+                      borderRadius: BorderRadius.circular(20),
                       hint: const Text("Category"),
                       isExpanded: true,
                       value: category,
@@ -456,14 +626,179 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
                     ),
                   ),
                 ]),
+
+                const Padding(
+                  padding: EdgeInsets.only(top: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Choose Color",
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                ),
+                no_color == false
+                    ? Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.black)),
+                        child: Column(
+                          children: [
+                            const Text("If Color Available"),
+                            ElevatedButton(
+                                style: const ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStatePropertyAll(Colors.amber)),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text("Choose Color"),
+                                      actions: <Widget>[
+                                        Column(
+                                          children: [
+                                            MaterialPicker(
+                                                pickerColor: currentColor,
+                                                onColorChanged: changeColor),
+                                            TextButton(
+                                                onPressed: () {
+                                                  const snackdemo = SnackBar(
+                                                    content: Text(
+                                                        'Already Selected'),
+                                                    backgroundColor: Colors.red,
+                                                    elevation: 10,
+                                                    behavior: SnackBarBehavior
+                                                        .floating,
+                                                    margin: EdgeInsets.all(5),
+                                                  );
+                                                  chosenColor.contains(
+                                                          currentColor)
+                                                      ? ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              snackdemo)
+                                                      : chosenColor
+                                                          .add(currentColor);
+                                                  print(chosenColor);
+                                                  setState(() {});
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("Done"))
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: const Text("Choose Color")),
+                          ],
+                        ),
+                      )
+                    : Container(),
+
+                // Text("$selectedColor"),
+                chosenColor.isNotEmpty
+                    ? SizedBox(
+                        height: 50,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: chosenColor.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, position) {
+                            return SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 18.0, right: 20),
+                                      child: CircleAvatar(
+                                        radius: 30,
+                                        backgroundColor: chosenColor[position],
+                                      ),
+                                    ),
+                                    IconButton(
+                                        iconSize: 20,
+                                        color: Colors.red,
+                                        onPressed: () {
+                                          chosenColor.removeAt(position);
+                                          print(chosenColor);
+                                          setState(() {});
+                                        },
+                                        icon: const Icon(
+                                          Icons.cancel,
+                                        )),
+                                  ],
+                                ));
+                          },
+                        ),
+                      )
+                    : Container(),
+                chosenColor.isEmpty && no_color == false
+                    ? Column(children: [
+                        const Text("If color not available"),
+                        TextButton(
+                          onPressed: () {
+                            no_color = true;
+                            setState(() {});
+                          },
+                          style: const ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.red)),
+                          child: const Text("No color"),
+                        ),
+                      ])
+                    : Container(),
+                no_color == true
+                    ? SizedBox(
+                        height: 70,
+                        width: 100,
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 25.0),
+                              child: Container(
+                                height: 30,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                    color: const Color.fromARGB(
+                                        255, 220, 220, 220),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: const Center(
+                                    child: Text(
+                                  "No color",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color:
+                                          Color.fromARGB(255, 129, 128, 128)),
+                                )),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 45.0),
+                              child: IconButton(
+                                  onPressed: () {
+                                    no_color = false;
+                                    setState(() {});
+                                  },
+                                  icon: const Icon(Icons.cancel)),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(),
+
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 14.0, right: 100, left: 100),
                   child: TextFormField(
                       controller: QuantityController,
                       decoration: const InputDecoration(
-
-                          // icon: Icon(Icons.currency_rupee_sharp),
                           hintText: "Quantity",
                           labelText: "Quantity",
                           labelStyle: TextStyle(
@@ -480,7 +815,6 @@ class _PostState extends State<Post> with SingleTickerProviderStateMixin {
                   child: TextFormField(
                       controller: MrpController,
                       decoration: const InputDecoration(
-                          // prefixIcon: Icon(Icons.shopping_cart),
                           icon: Icon(
                             Icons.currency_rupee_sharp,
                             color: Colors.amber,

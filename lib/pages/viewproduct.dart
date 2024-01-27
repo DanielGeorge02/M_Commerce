@@ -22,6 +22,7 @@ class ViewProduct extends StatefulWidget {
   var email;
   var currentuser;
   var shop;
+  var type;
   ViewProduct(
       {super.key,
       this.New,
@@ -33,6 +34,7 @@ class ViewProduct extends StatefulWidget {
       this.quan,
       this.email,
       this.currentuser,
+      this.type,
       this.shop});
 
   @override
@@ -615,7 +617,7 @@ class _ViewProductState extends State<ViewProduct>
                 }
               }
               // Handle other connection states
-              return CircularProgressIndicator(); // Or any other loading indicator
+              return const CircularProgressIndicator(); // Or any other loading indicator
             } catch (e) {
               print(e);
               return Container();

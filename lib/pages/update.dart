@@ -1,6 +1,7 @@
-// ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, non_constant_identifier_names
+// ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, non_constant_identifier_names, avoid_print
 
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -128,13 +129,33 @@ class _UpdateState extends State<Update> with SingleTickerProviderStateMixin {
             ),
           ));
 
-  updatedata() async {
+  updatedata(
+    address,
+    color,
+  ) async {
     String name = DateTime.now().millisecondsSinceEpoch.toString();
     var imageFile =
         FirebaseStorage.instance.ref().child("seller_info").child(name);
     UploadTask task = imageFile.putFile(file!);
     TaskSnapshot snapshot = await task;
     url = await snapshot.ref.getDownloadURL();
+
+    DocumentReference docRef = FirebaseFirestore.instance
+        .collection("your_collection_name")
+        .doc("your_document_id");
+
+    try {
+      // Update the data using the update method
+      await docRef.update({
+        'AddrController': 'new_value1',
+        'field2': 'new_value2',
+        // Add more fields to update as needed
+      });
+
+      print('Document updated successfully');
+    } catch (e) {
+      print('Error updating document: $e');
+    }
   }
 
   @override
@@ -551,7 +572,7 @@ class _UpdateState extends State<Update> with SingleTickerProviderStateMixin {
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.amber),
                     onPressed: () {
-                      updatedata();
+                      // updatedata();
                     },
                     child: const Text("Update"))
               ],

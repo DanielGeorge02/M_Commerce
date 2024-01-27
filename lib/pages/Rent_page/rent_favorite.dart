@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, prefer_interpolation_to_compose_strings
+// ignore_for_file: camel_case_types, prefer_interpolation_to_compose_strings, avoid_print
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -52,14 +52,14 @@ class _MyProductState extends State<MyProduct> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            StreamBuilder(
-              stream: FirebaseFirestore.instance
+            FutureBuilder(
+              future: FirebaseFirestore.instance
                   .collection("Seller_req")
-                  .doc("A3YtV51DsJGf7ruoFV6x")
+                  .doc("Products")
                   .collection("item")
                   .where("email",
                       isEqualTo: FirebaseAuth.instance.currentUser!.email)
-                  .snapshots(),
+                  .get(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 try {
@@ -107,7 +107,7 @@ class _MyProductState extends State<MyProduct> {
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
-                                          childAspectRatio: 0.52),
+                                          childAspectRatio: 0.58),
                                   itemBuilder: (_, index) {
                                     DocumentSnapshot documentSnapshot =
                                         snapshot.data!.docs[index];
@@ -138,69 +138,71 @@ class _MyProductState extends State<MyProduct> {
                                             context: context,
                                             builder: (cpntext) {
                                               return AlertDialog(
-                                                title: const Text("Remove product"),
-                                                content: const SingleChildScrollView(
-                                              child: ListBody(
-                                                children: <Widget>[
-                                                  Text(
-                                                      'Are you sure want to remove your product?'),
-                                                ],
-                                              ),
+                                                title: const Text(
+                                                    "Remove product"),
+                                                content:
+                                                    const SingleChildScrollView(
+                                                  child: ListBody(
+                                                    children: <Widget>[
+                                                      Text(
+                                                          'Are you sure want to remove your product?'),
+                                                    ],
+                                                  ),
                                                 ),
                                                 actions: <Widget>[
-                                              TextButton(
-                                                child: const Text('No'),
-                                                onPressed: () {
-                                                  Navigator.of(context)
-                                                      .pop();
-                                                },
-                                              ),
-                                              TextButton(
-                                                child: const Text('Yes'),
-                                                onPressed: () {
-                                                  FirebaseFirestore.instance
-                                                      .collection(
-                                                          "Seller_req")
-                                                      .doc(
-                                                          "A3YtV51DsJGf7ruoFV6x")
-                                                      .collection("item")
-                                                      .doc(documentSnapshot
-                                                          .id)
-                                                      .delete();
-                                                  ScaffoldMessenger.of(
-                                                          context)
-                                                      .showSnackBar(
-                                                          SnackBar(
-                                                    content: Container(
-                                                      padding:
-                                                          const EdgeInsets
-                                                              .all(16),
-                                                      height: 60,
-                                                      decoration: const BoxDecoration(
-                                                          color: Colors.red,
-                                                          borderRadius: BorderRadius
-                                                              .all(Radius
-                                                                  .circular(
-                                                                      20))),
-                                                      child: const Text(
-                                                        "Item removed!!",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                    behavior:
-                                                        SnackBarBehavior
-                                                            .floating,
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    elevation: 0,
-                                                  ));
-                                                  Navigator.of(context)
-                                                      .pop();
-                                                },
-                                              ),
+                                                  TextButton(
+                                                    child: const Text('No'),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                  ),
+                                                  TextButton(
+                                                    child: const Text('Yes'),
+                                                    onPressed: () {
+                                                      FirebaseFirestore.instance
+                                                          .collection(
+                                                              "Seller_req")
+                                                          .doc(
+                                                              "A3YtV51DsJGf7ruoFV6x")
+                                                          .collection("item")
+                                                          .doc(documentSnapshot
+                                                              .id)
+                                                          .delete();
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              SnackBar(
+                                                        content: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(16),
+                                                          height: 60,
+                                                          decoration: const BoxDecoration(
+                                                              color: Colors.red,
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          20))),
+                                                          child: const Text(
+                                                            "Item removed!!",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ),
+                                                        behavior:
+                                                            SnackBarBehavior
+                                                                .floating,
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        elevation: 0,
+                                                      ));
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                  ),
                                                 ],
                                               );
                                             });
@@ -210,12 +212,11 @@ class _MyProductState extends State<MyProduct> {
                                         child: Column(
                                           children: [
                                             Text(
-                                              'UPLOADED : ${formattedDate(
-                                                  documentSnapshot['date'])}',
+                                              'UPLOADED : ${formattedDate(documentSnapshot['date'])}',
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600),
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w600),
                                             ),
                                             Stack(
                                               children: [

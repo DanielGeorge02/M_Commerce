@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:m_commerce/pages/Rent_page/rent_Bottom.dart';
 import 'package:m_commerce/pages/Rent_page/rent_category.dart';
-import 'package:m_commerce/pages/Rent_page/rent_homepage.dart';
 
 class Rent_SeeAll extends StatefulWidget {
   Rent_SeeAll({super.key, this.Category});

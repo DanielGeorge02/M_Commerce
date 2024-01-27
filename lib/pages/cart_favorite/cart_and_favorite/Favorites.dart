@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, avoid_print
+// ignore_for_file: file_names, avoid_print, prefer_interpolation_to_compose_strings
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -221,7 +221,7 @@ class _FavoritesState extends State<Favorites> {
                   }
                 }
                 // Handle other connection states
-                return CircularProgressIndicator(); // Or any other loading indicator
+                return const CircularProgressIndicator(); // Or any other loading indicator
               } catch (e) {
                 print(e);
                 return Container();
