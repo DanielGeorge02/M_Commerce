@@ -1,10 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:m_commerce/pages/home/home.dart';
 import 'package:m_commerce/pages/login/registerpage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:m_commerce/pages/login/userType.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,30 +15,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
   late double height, width;
-
-  Future signIn() async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-              child: CircularProgressIndicator(
-            color: Colors.amber,
-            backgroundColor: Colors.amber.shade200,
-          ));
-        });
-
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(
-            email: emailcontroller.text.trim(),
-            password: passwordcontroller.text)
-        .then((value) async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('email', emailcontroller.text.trim());
-      Navigator.of(context).pop();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Home()));
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +155,13 @@ class _LoginPageState extends State<LoginPage> {
                           padding: EdgeInsets.only(top: height * 0.01),
                           child: TextButton(
                             onPressed: () {
-                              signIn();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => UserType(
+                                            email: emailcontroller.text,
+                                            password: passwordcontroller.text,
+                                          )));
                             },
                             style: TextButton.styleFrom(
                                 fixedSize: const Size(360, 50),
