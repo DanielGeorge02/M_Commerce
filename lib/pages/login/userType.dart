@@ -1,27 +1,31 @@
 // ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, deprecated_member_use, file_names, avoid_print, use_build_context_synchronously
 
 import 'package:animated_background/animated_background.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:m_commerce/pages/home/home.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class UserType extends StatefulWidget {
+final userTypeProvider = StateProvider<String>((ref) => "");
+
+class UserType extends ConsumerStatefulWidget {
   var email;
   var password;
 
   UserType({super.key, @required this.email, @required this.password});
 
   @override
-  State<UserType> createState() => _UserTypeState();
+  ConsumerState<UserType> createState() => _UserTypeState();
 }
 
-class _UserTypeState extends State<UserType> with TickerProviderStateMixin {
+class _UserTypeState extends ConsumerState<UserType>
+    with TickerProviderStateMixin {
   int index = 0;
 
-  Future signIn() async {
+  Future signIn(String userType) async {
     showDialog(
         context: context,
         builder: (context) {
@@ -36,8 +40,15 @@ class _UserTypeState extends State<UserType> with TickerProviderStateMixin {
         .signInWithEmailAndPassword(
             email: widget.email.trim(), password: widget.password)
         .then((value) async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('email', widget.email.trim());
+      var collectionreference = FirebaseFirestore.instance
+          .collection("No. of Users")
+          .doc()
+          .collection(ref.read(userTypeProvider).toString())
+          .doc(FirebaseAuth.instance.currentUser!.email);
+
+      return collectionreference
+          .set({"email": widget.email, "password": widget.password});
+    }).then((value) {
       Navigator.of(context).pop();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const Home()));
@@ -48,6 +59,7 @@ class _UserTypeState extends State<UserType> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
         body: Container(
       color: Colors.white,
@@ -93,6 +105,8 @@ class _UserTypeState extends State<UserType> with TickerProviderStateMixin {
                             ),
                             InkWell(
                                 onTap: () {
+                                  ref.watch(userTypeProvider.notifier).state =
+                                      "Shop_Owner";
                                   if (index != 1) {
                                     index = 1;
                                   } else {
@@ -184,6 +198,8 @@ class _UserTypeState extends State<UserType> with TickerProviderStateMixin {
                             ),
                             InkWell(
                               onTap: () {
+                                ref.watch(userTypeProvider.notifier).state =
+                                    "Self_Service";
                                 if (index != 2) {
                                   index = 2;
                                 } else {
@@ -276,6 +292,8 @@ class _UserTypeState extends State<UserType> with TickerProviderStateMixin {
                           ),
                           InkWell(
                             onTap: () {
+                              ref.watch(userTypeProvider.notifier).state =
+                                  "Customer";
                               if (index != 3) {
                                 index = 3;
                               } else {
@@ -361,6 +379,8 @@ class _UserTypeState extends State<UserType> with TickerProviderStateMixin {
                           ),
                           InkWell(
                             onTap: (() {
+                              ref.watch(userTypeProvider.notifier).state =
+                                  "Private_Seller";
                               if (index != 4) {
                                 index = 4;
                               } else {
@@ -442,7 +462,7 @@ class _UserTypeState extends State<UserType> with TickerProviderStateMixin {
                       width: width * 0.2,
                       child: TextButton(
                         onPressed: () {
-                          signIn();
+                          signIn(ref.read(userTypeProvider).toString());
                         },
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all<

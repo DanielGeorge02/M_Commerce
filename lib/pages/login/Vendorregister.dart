@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:m_commerce/pages/home/home.dart';
 import 'package:m_commerce/pages/login/loginpage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class VendorRegister extends StatefulWidget {
   const VendorRegister({super.key});
@@ -34,10 +33,11 @@ class _VendorRegisterState extends State<VendorRegister> {
             email: emailcontroller.text.trim(),
             password: passwordcontroller.text)
         .then((value) async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('email', emailcontroller.text.trim());
+      // final SharedPreferences prefs = await SharedPreferences.getInstance();
+      // await prefs.setString('email', emailcontroller.text.trim());
       Navigator.of(context).pop();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Home()));
     });
   }
 
@@ -65,7 +65,8 @@ class _VendorRegisterState extends State<VendorRegister> {
                                   MaterialPageRoute(
                                       builder: (context) => const LoginPage()));
                             },
-                            icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+                            icon:
+                                const Icon(Icons.arrow_back_ios_new_outlined)),
                       ),
                       const Align(
                         alignment: Alignment.center,
@@ -127,7 +128,8 @@ class _VendorRegisterState extends State<VendorRegister> {
                                   color: Colors.black,
                                 ),
                                 labelText: "NAME",
-                                labelStyle: const TextStyle(color: Colors.black),
+                                labelStyle:
+                                    const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -151,7 +153,8 @@ class _VendorRegisterState extends State<VendorRegister> {
                                   color: Colors.black,
                                 ),
                                 labelText: "PHONE NUMBER",
-                                labelStyle: const TextStyle(color: Colors.black),
+                                labelStyle:
+                                    const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -175,7 +178,8 @@ class _VendorRegisterState extends State<VendorRegister> {
                                   color: Colors.black,
                                 ),
                                 labelText: "EMAIL ADDRESS",
-                                labelStyle: const TextStyle(color: Colors.black),
+                                labelStyle:
+                                    const TextStyle(color: Colors.black),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                 ),
@@ -202,7 +206,8 @@ class _VendorRegisterState extends State<VendorRegister> {
                                   color: Colors.black,
                                 ),
                                 labelText: "PASSWORD",
-                                labelStyle: const TextStyle(color: Colors.black),
+                                labelStyle:
+                                    const TextStyle(color: Colors.black),
                                 focusedBorder: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.white)),

@@ -1,26 +1,32 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:m_commerce/pages/Post.dart';
 import 'package:m_commerce/pages/home/chatlobby.dart';
 import 'package:m_commerce/pages/home/drawer.dart';
 import 'package:m_commerce/pages/home/Search.dart';
 import 'package:m_commerce/pages/login/rent_splash.dart';
+import 'package:m_commerce/pages/login/userType.dart';
 import 'package:m_commerce/pages/viewproduct.dart';
 import '../category/seeAll.dart';
 import 'package:animated_background/animated_background.dart';
 
-class Homepage extends StatefulWidget {
+class Homepage extends ConsumerStatefulWidget {
   const Homepage({super.key});
 
   @override
-  State<Homepage> createState() => _HomepageState();
+  ConsumerState<Homepage> createState() => _HomepageState();
 }
 
-class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
+class _HomepageState extends ConsumerState<Homepage>
+    with TickerProviderStateMixin {
   // ignore: non_constant_identifier_names
   List upl_image = [];
   getData() async {
@@ -205,335 +211,434 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
               ])),
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const ChatLobby()));
-              },
-              icon: const Icon(Icons.chat)),
+          // IconButton(
+          //     onPressed: () {
+          //       Navigator.push(context,
+          //           MaterialPageRoute(builder: (context) => const ChatLobby()));
+          //     },
+          //     icon: const Icon(Icons.chat)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
         ],
       ),
       drawer: const MainDrawer(),
       body: WillPopScope(
-        onWillPop: () => _onbackbottonpressed(context),
-        child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: FutureBuilder<DocumentSnapshot>(
-              future: users.doc(FirebaseAuth.instance.currentUser!.email).get(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return const Text("Something went wrong");
-                }
+          onWillPop: () => _onbackbottonpressed(context),
+          child: userTypeProvider == "Customer"
+              ? SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: FutureBuilder<DocumentSnapshot>(
+                    future: users
+                        .doc(FirebaseAuth.instance.currentUser!.email)
+                        .get(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        return const Text("Something went wrong");
+                      }
 
-                if (snapshot.hasData && !snapshot.data!.exists) {
-                  return const Text("Document does not exist");
-                }
+                      if (snapshot.hasData && !snapshot.data!.exists) {
+                        return const Text("Document does not exist");
+                      }
 
-                if (snapshot.connectionState == ConnectionState.done) {
-                  Map<String, dynamic> data =
-                      snapshot.data!.data() as Map<String, dynamic>;
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: height * 0.13,
-                        child: Center(
-                          child: Text.rich(
-                            TextSpan(children: [
-                              const TextSpan(
-                                  text: "Welcome ",
-                                  style: TextStyle(fontSize: 30)),
-                              TextSpan(
-                                  text: data["Name"].toString().toUpperCase(),
-                                  style: const TextStyle(
-                                      fontSize: 35, color: Colors.amber))
-                            ]),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        color: Colors.white,
-                        child: CarouselSlider(
-                            items: imgList
-                                .map(
-                                  (item) => Center(
-                                    child: Image.asset(item,
-                                        fit: BoxFit.cover, width: width * 0.9),
-                                  ),
-                                )
-                                .toList(),
-                            options: CarouselOptions(
-                              autoPlay: true,
-                              // aspectRatio: 2.0,
-                              enlargeCenterPage: true,
-                            )),
-                      ),
-
-                      Container(
-                        height: height * 0.2,
-                        color: Colors.amberAccent,
-                        child: AnimatedBackground(
-                          behaviour: RandomParticleBehaviour(
-                              options: const ParticleOptions(
-                            spawnMaxRadius: 20,
-                            spawnMinSpeed: 50,
-                            particleCount: 50,
-                            spawnMaxSpeed: 80,
-                            minOpacity: 0.7,
-                            maxOpacity: 0.9,
-                            baseColor: Colors.white,
-                          )),
-                          vsync: this,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => SeeAll()));
-                                  },
-                                  child: _buildShop(photos: "buy.png")),
-                              GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Post()));
-                                  },
-                                  child: _buildShop(photos: "sale.png")),
-                              GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Splash()));
-                                  },
-                                  child: _buildShop(photos: "rent.png")),
-                            ],
-                          ),
-                        ),
-                      ),
-                      //Category>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: width * 0.03),
-                            child: const Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "Category",
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        Map<String, dynamic> data =
+                            snapshot.data!.data() as Map<String, dynamic>;
+                        return Column(
+                          children: [
+                            SizedBox(
+                              height: height * 0.13,
+                              child: Center(
+                                child: Text.rich(
+                                  TextSpan(children: [
+                                    const TextSpan(
+                                        text: "Welcome ",
+                                        style: TextStyle(fontSize: 30)),
+                                    TextSpan(
+                                        text: data["Name"]
+                                            .toString()
+                                            .toUpperCase(),
+                                        style: const TextStyle(
+                                            fontSize: 35, color: Colors.amber))
+                                  ]),
+                                ),
                               ),
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SeeAll()),
-                                );
-                              },
-                              style: ButtonStyle(
-                                overlayColor: MaterialStateColor.resolveWith(
-                                    //no splash for textbutton
-                                    (states) => Colors.transparent),
-                                foregroundColor:
-                                    MaterialStateProperty.all(Colors.black),
-                              ),
-                              child: const Text(
-                                "See All >",
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            _buildCategory(
-                                photo: "electronics.jpg", name: "Electronics"),
-                            _buildCategory(
-                                photo: "dresses.jpg", name: "Fashion"),
-                            _buildCategory(
-                                photo: "Furniture.jpeg", name: "Furniture"),
-                            _buildCategory(
-                                photo: "phone.webp", name: "Mobiles"),
-                            _buildCategory(
-                                photo: "Grocery.png", name: "Grocery"),
-                            _buildCategory(photo: "toys.jpeg", name: "Toys"),
-                            _buildCategory(photo: "sports.jpg", name: "Sports"),
-                            _buildCategory(
-                                photo: "Utensils.webp", name: "Home"),
-                          ],
-                        ),
-                      ),
-
-                      //Recommended>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: width * 0.03, top: height * 0.025),
-                        child: const Align(
-                            alignment: Alignment.topLeft,
-                            child: Text("Recommended")),
-                      ),
-
-                      SizedBox(
-                        height: height * 1.15,
-                        child: GridView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 5,
-                                  mainAxisSpacing: 20,
-                                  childAspectRatio: 0.73),
-                          children: [
-                            for (int i = 0; i < upl_image.length; i++)
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ViewProduct(
-                                              color: const [],
-                                              New: upl_image[i]
-                                                  ["PpriceController"],
-                                              des: upl_image[i]
-                                                  ["PdesController"],
-                                              image: upl_image[i]["image"],
-                                              name: upl_image[i]
-                                                  ["PnameController"],
-                                              old: upl_image[i]
-                                                  ["MrpController"],
-                                              addr: upl_image[i]
-                                                  ["AddrController"],
-                                              quan: upl_image[i]
-                                                  ["QuantityController"])));
-                                },
-                                child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(13)),
-                                    child: Column(children: [
-                                      Container(
-                                          height: height * 0.2,
-                                          color: Colors.white,
-                                          child: CachedNetworkImage(
-                                            imageUrl: upl_image[i]["image"],
-                                          )),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        height: height * 0.1,
-                                        color: Colors.white,
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: width * 0.05),
-                                          child: Text(
-                                              upl_image[i]["PnameController"]),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Text.rich(
-                                          TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text:
-                                                    '\u{20B9}${upl_image[i]["MrpController"]}',
-                                                style: const TextStyle(
-                                                    decoration: TextDecoration
-                                                        .lineThrough,
-                                                    fontSize: 11,
-                                                    color: Colors.grey),
-                                              ),
-                                              TextSpan(
-                                                  text:
-                                                      ' \u{20B9}${upl_image[i]["PpriceController"]}',
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18)),
-                                            ],
-                                          ),
+                            Container(
+                              color: Colors.white,
+                              child: CarouselSlider(
+                                  items: imgList
+                                      .map(
+                                        (item) => Center(
+                                          child: Image.asset(item,
+                                              fit: BoxFit.cover,
+                                              width: width * 0.9),
                                         ),
                                       )
-                                    ])),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }
+                                      .toList(),
+                                  options: CarouselOptions(
+                                    autoPlay: true,
+                                    // aspectRatio: 2.0,
+                                    enlargeCenterPage: true,
+                                  )),
+                            ),
 
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: height * 0.4,
+                            Container(
+                              height: height * 0.2,
+                              color: Colors.amberAccent,
+                              child: AnimatedBackground(
+                                behaviour: RandomParticleBehaviour(
+                                    options: const ParticleOptions(
+                                  spawnMaxRadius: 20,
+                                  spawnMinSpeed: 50,
+                                  particleCount: 50,
+                                  spawnMaxSpeed: 80,
+                                  minOpacity: 0.7,
+                                  maxOpacity: 0.9,
+                                  baseColor: Colors.white,
+                                )),
+                                vsync: this,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SeeAll()));
+                                        },
+                                        child: _buildShop(photos: "buy.png")),
+                                    GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Post()));
+                                        },
+                                        child: _buildShop(photos: "sale.png")),
+                                    GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Splash()));
+                                        },
+                                        child: _buildShop(photos: "rent.png")),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            //Category>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: width * 0.03),
+                                  child: const Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "Category",
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => SeeAll()),
+                                      );
+                                    },
+                                    style: ButtonStyle(
+                                      overlayColor:
+                                          MaterialStateColor.resolveWith(
+                                              //no splash for textbutton
+                                              (states) => Colors.transparent),
+                                      foregroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.black),
+                                    ),
+                                    child: const Text(
+                                      "See All >",
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  _buildCategory(
+                                      photo: "electronics.jpg",
+                                      name: "Electronics"),
+                                  _buildCategory(
+                                      photo: "dresses.jpg", name: "Fashion"),
+                                  _buildCategory(
+                                      photo: "Furniture.jpeg",
+                                      name: "Furniture"),
+                                  _buildCategory(
+                                      photo: "phone.webp", name: "Mobiles"),
+                                  _buildCategory(
+                                      photo: "Grocery.png", name: "Grocery"),
+                                  _buildCategory(
+                                      photo: "toys.jpeg", name: "Toys"),
+                                  _buildCategory(
+                                      photo: "sports.jpg", name: "Sports"),
+                                  _buildCategory(
+                                      photo: "Utensils.webp", name: "Home"),
+                                ],
+                              ),
+                            ),
+
+                            //Recommended>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: width * 0.03, top: height * 0.025),
+                              child: const Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text("Recommended")),
+                            ),
+
+                            SizedBox(
+                              height: height * 1.15,
+                              child: GridView(
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 5,
+                                        mainAxisSpacing: 20,
+                                        childAspectRatio: 0.73),
+                                children: [
+                                  for (int i = 0; i < upl_image.length; i++)
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ViewProduct(
+                                                    color: const [],
+                                                    New: upl_image[i]
+                                                        ["PpriceController"],
+                                                    des: upl_image[i]
+                                                        ["PdesController"],
+                                                    image: upl_image[i]
+                                                        ["image"],
+                                                    name: upl_image[i]
+                                                        ["PnameController"],
+                                                    old: upl_image[i]
+                                                        ["MrpController"],
+                                                    addr: upl_image[i]
+                                                        ["AddrController"],
+                                                    quan: upl_image[i][
+                                                        "QuantityController"])));
+                                      },
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(13)),
+                                          child: Column(children: [
+                                            Container(
+                                                height: height * 0.2,
+                                                color: Colors.white,
+                                                child: CachedNetworkImage(
+                                                  imageUrl: upl_image[i]
+                                                      ["image"],
+                                                )),
+                                            Container(
+                                              alignment: Alignment.center,
+                                              height: height * 0.1,
+                                              color: Colors.white,
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: width * 0.05),
+                                                child: Text(upl_image[i]
+                                                    ["PnameController"]),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          '\u{20B9}${upl_image[i]["MrpController"]}',
+                                                      style: const TextStyle(
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .lineThrough,
+                                                          fontSize: 11,
+                                                          color: Colors.grey),
+                                                    ),
+                                                    TextSpan(
+                                                        text:
+                                                            ' \u{20B9}${upl_image[i]["PpriceController"]}',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 18)),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          ])),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: height * 0.4,
+                          ),
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ],
+                      );
+                    },
+                  ))
+              : SingleChildScrollView(
+                  child: SizedBox(
+                    width: width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.symmetric(vertical: height * 0.02),
+                              child: Image(
+                                  width: width * 0.9,
+                                  image: const AssetImage(
+                                      "images/sellbanner.webp")),
+                            ))
+                      ],
                     ),
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ],
-                );
-              },
-            )),
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: width * 0.1),
-            child: FloatingActionButton.extended(
-                heroTag: "btn1",
-                focusColor: Colors.amber,
-                backgroundColor: Colors.black,
-                icon: const Icon(
-                  Icons.shopping_cart_checkout_rounded,
-                  color: Colors.amber,
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Splash()));
-                },
-                label: const Text(
-                  "Rental Products",
-                  style: TextStyle(color: Colors.amber),
+                  ),
                 )),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: width * 0.1),
-            child: FloatingActionButton.extended(
-              heroTag: "btn2",
-              elevation: 30,
-              label: const Text(
-                "Upload",
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.amber[600],
-              icon: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Post()));
-              },
+      floatingActionButton: ref.read(userTypeProvider) == "Customer"
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: width * 0.1),
+                  child: FloatingActionButton.extended(
+                      heroTag: "btn1",
+                      focusColor: Colors.amber,
+                      backgroundColor: Colors.black,
+                      icon: const Icon(
+                        Icons.shopping_cart_checkout_rounded,
+                        color: Colors.amber,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Splash()));
+                      },
+                      label: const Text(
+                        "Rental Products",
+                        style: TextStyle(color: Colors.amber),
+                      )),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: width * 0.1),
+                  child: FloatingActionButton.extended(
+                    heroTag: "btn2",
+                    elevation: 30,
+                    label: const Text(
+                      "Upload",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.amber[600],
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Post()));
+                    },
+                  ),
+                ),
+              ],
+            )
+          : SpeedDial(
+              children: [
+                SpeedDialChild(
+                    child: const Icon(Icons.shopping_cart_checkout_rounded),
+                    foregroundColor: Colors.amber,
+                    backgroundColor: Colors.black,
+                    label: 'Upload your Shop Products',
+                    onTap: (() {})),
+                SpeedDialChild(
+                    child: const Icon(Icons.upload),
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.amber,
+                    label: 'Upload your Shop Rental Products',
+                    onTap: (() {}))
+              ],
+              child: const Icon(Icons.add),
+
+              // speedDialChildren: <SpeedDialChild>[
+              //   SpeedDialChild(
+              //     child: const Icon(Icons.directions_run),
+              //     foregroundColor: Colors.white,
+              //     backgroundColor: Colors.red,
+              //     label: 'Let\'s go for a run!',
+              //     onPressed: () {
+              //       setState(() {
+              //         _text = 'You pressed "Let\'s go for a run!"';
+              //       });
+              //     },
+              //   ),
+              //   SpeedDialChild(
+              //     child: const Icon(Icons.directions_walk),
+              //     foregroundColor: Colors.black,
+              //     backgroundColor: Colors.yellow,
+              //     label: 'Let\'s go for a walk!',
+              //     onPressed: () {
+              //       setState(() {
+              //         _text = 'You pressed "Let\'s go for a walk!"';
+              //       });
+              //     },
+              //   ),
+              //   SpeedDialChild(
+              //     child: const Icon(Icons.directions_bike),
+              //     foregroundColor: Colors.white,
+              //     backgroundColor: Colors.green,
+              //     label: 'Let\'s go cycling!',
+              //     onPressed: () {
+              //       setState(() {
+              //         _text = 'You pressed "Let\'s go cycling!"';
+              //       });
+              //     },
+              //   ),
+              // ],
+              // closedForegroundColor: Colors.black,
+              // openForegroundColor: Colors.white,
+              // closedBackgroundColor: Colors.white,
+              // openBackgroundColor: Colors.black,
             ),
-          ),
-        ],
-      ),
     );
   }
 }
