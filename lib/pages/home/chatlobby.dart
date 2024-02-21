@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:m_commerce/pages/chat.dart';
 
 class ChatLobby extends StatefulWidget {
@@ -18,16 +19,22 @@ class _LobbyState extends State<ChatLobby> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Chats'),
+          title: Text("Chats",
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 27,
+                fontWeight: FontWeight.w500,
+              )),
+          backgroundColor: Colors.white,
           centerTitle: true,
           toolbarHeight: height * 0.09,
           automaticallyImplyLeading: false,
           leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.popAndPushNamed(context, 'home');
               },
               icon: const Icon(Icons.arrow_back_ios_new_outlined),
-              color: Colors.white),
+              color: Colors.black),
         ),
         body: SafeArea(
           child: StreamBuilder<QuerySnapshot>(

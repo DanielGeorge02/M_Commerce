@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:m_commerce/pages/Post.dart';
+import 'package:m_commerce/pages/Rent_page/rent_post.dart';
 import 'package:m_commerce/pages/home/chatlobby.dart';
 import 'package:m_commerce/pages/home/drawer.dart';
 import 'package:m_commerce/pages/home/Search.dart';
@@ -583,61 +584,41 @@ class _HomepageState extends ConsumerState<Homepage>
               ],
             )
           : SpeedDial(
+              backgroundColor: Colors.amber,
+              elevation: 30,
+              activeBackgroundColor: const Color.fromARGB(255, 211, 210, 210),
+              activeForegroundColor: Colors.amber,
+              activeIcon: Icons.close,
               children: [
                 SpeedDialChild(
                     child: const Icon(Icons.shopping_cart_checkout_rounded),
                     foregroundColor: Colors.amber,
                     backgroundColor: Colors.black,
-                    label: 'Upload your Shop Products',
-                    onTap: (() {})),
+                    label: 'Upload your Shop Rental Products',
+                    elevation: 20,
+                    onTap: (() {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Rent_post()));
+                    })),
                 SpeedDialChild(
                     child: const Icon(Icons.upload),
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.amber,
-                    label: 'Upload your Shop Rental Products',
-                    onTap: (() {}))
+                    elevation: 20,
+                    label: 'Upload your Shop Products',
+                    onTap: (() {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Post()));
+                    }))
               ],
-              child: const Icon(Icons.add),
-
-              // speedDialChildren: <SpeedDialChild>[
-              //   SpeedDialChild(
-              //     child: const Icon(Icons.directions_run),
-              //     foregroundColor: Colors.white,
-              //     backgroundColor: Colors.red,
-              //     label: 'Let\'s go for a run!',
-              //     onPressed: () {
-              //       setState(() {
-              //         _text = 'You pressed "Let\'s go for a run!"';
-              //       });
-              //     },
-              //   ),
-              //   SpeedDialChild(
-              //     child: const Icon(Icons.directions_walk),
-              //     foregroundColor: Colors.black,
-              //     backgroundColor: Colors.yellow,
-              //     label: 'Let\'s go for a walk!',
-              //     onPressed: () {
-              //       setState(() {
-              //         _text = 'You pressed "Let\'s go for a walk!"';
-              //       });
-              //     },
-              //   ),
-              //   SpeedDialChild(
-              //     child: const Icon(Icons.directions_bike),
-              //     foregroundColor: Colors.white,
-              //     backgroundColor: Colors.green,
-              //     label: 'Let\'s go cycling!',
-              //     onPressed: () {
-              //       setState(() {
-              //         _text = 'You pressed "Let\'s go cycling!"';
-              //       });
-              //     },
-              //   ),
-              // ],
-              // closedForegroundColor: Colors.black,
-              // openForegroundColor: Colors.white,
-              // closedBackgroundColor: Colors.white,
-              // openBackgroundColor: Colors.black,
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
             ),
     );
   }
