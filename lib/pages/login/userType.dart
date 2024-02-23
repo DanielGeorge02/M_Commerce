@@ -4,13 +4,13 @@ import 'dart:math';
 
 import 'package:animated_background/animated_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:m_commerce/pages/home/home.dart';
 import 'package:m_commerce/pages/login/registerpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final userTypeProvider = StateProvider<String>((ref) => "");
 final uniqueId = StateProvider<String>((ref) => "");
@@ -20,11 +20,7 @@ class UserType extends ConsumerStatefulWidget {
   var password;
   var register;
 
-  UserType(
-      {super.key,
-      @required this.email,
-      @required this.password,
-      @required this.register});
+  UserType({super.key, this.email, this.password, this.register});
 
   @override
   ConsumerState<UserType> createState() => _UserTypeState();
@@ -36,70 +32,83 @@ class _UserTypeState extends ConsumerState<UserType>
 
   DateTime now = DateTime.now();
   var r = Random();
-  String unique = "";
+
+  String userType = "";
   bool register = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     register = widget.register;
+    userType = ref.read(userTypeProvider);
   }
 
   Future signIn(String userType) async {
-    if (ref.read(uniqueId) == "") {
-      unique = now.hour.toString() +
-          now.minute.toString() +
-          now.second.toString() +
-          String.fromCharCodes(
-              List.generate(5, (index) => r.nextInt(33) + 89)) +
-          r.nextInt(1000).toString();
+    print(userType);
+    print("..................................................");
+    DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
+        .instance
+        .collection("No. of Users")
+        .doc(widget.email + userType)
+        .get();
+
+    if (!userData.exists) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('User not exists!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Center(
+                child: CircularProgressIndicator(
+              color: Colors.amber,
+              backgroundColor: Colors.amber.shade200,
+            ));
+          });
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Home()));
     }
 
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-              child: CircularProgressIndicator(
-            color: Colors.amber,
-            backgroundColor: Colors.amber.shade200,
-          ));
-        });
+    //   ref.read(uniqueId) == ""
+    //       ? await FirebaseAuth.instance
+    //           .signInWithEmailAndPassword(
+    //               email: widget.email.trim(), password: widget.password)
+    //           .then((value) async {
+    //           var collectionreference = FirebaseFirestore.instance
+    //               .collection("No. of Users")
+    //               .doc(unique)
+    //               .collection(ref.read(userTypeProvider).toString())
+    //               .doc(FirebaseAuth.instance.currentUser!.email);
 
-    ref.read(uniqueId) == ""
-        ? await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: widget.email.trim(), password: widget.password)
-            .then((value) async {
-            var collectionreference = FirebaseFirestore.instance
-                .collection("No. of Users")
-                .doc(unique)
-                .collection(ref.read(userTypeProvider).toString())
-                .doc(FirebaseAuth.instance.currentUser!.email);
+    //           return collectionreference
+    //               .set({"email": widget.email, "password": widget.password});
+    //         }).then((value) {
+    //           Navigator.of(context).pop();
+    //           Navigator.push(
+    //               context, MaterialPageRoute(builder: (context) => const Home()));
+    //         })
+    //       : await FirebaseAuth.instance
+    //           .signInWithEmailAndPassword(
+    //               email: widget.email.trim(), password: widget.password)
+    //           .then((value) async {
+    //           var collectionreference = FirebaseFirestore.instance
+    //               .collection("No. of Users")
+    //               .doc(ref.read(uniqueId))
+    //               .collection(ref.read(userTypeProvider).toString())
+    //               .doc(FirebaseAuth.instance.currentUser!.email);
 
-            return collectionreference
-                .set({"email": widget.email, "password": widget.password});
-          }).then((value) {
-            Navigator.of(context).pop();
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => const Home()));
-          })
-        : await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: widget.email.trim(), password: widget.password)
-            .then((value) async {
-            var collectionreference = FirebaseFirestore.instance
-                .collection("No. of Users")
-                .doc(ref.read(uniqueId))
-                .collection(ref.read(userTypeProvider).toString())
-                .doc(FirebaseAuth.instance.currentUser!.email);
-
-            return collectionreference
-                .set({"email": widget.email, "password": widget.password});
-          }).then((value) {
-            Navigator.of(context).pop();
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => const Home()));
-          });
+    //           return collectionreference
+    //               .set({"email": widget.email, "password": widget.password});
+    //         }).then((value) {
+    //           Navigator.of(context).pop();
+    //           Navigator.push(
+    //               context, MaterialPageRoute(builder: (context) => const Home()));
+    //         });
   }
 
   @override
@@ -378,7 +387,7 @@ class _UserTypeState extends ConsumerState<UserType>
                                                 right: width * 0.09,
                                                 top: width * 0.07),
                                             child: SvgPicture.asset(
-                                              "images/selfservice.svg",
+                                              "images/user.svg",
                                               color: Colors.amber,
                                             ),
                                           ),
@@ -467,7 +476,7 @@ class _UserTypeState extends ConsumerState<UserType>
                                                 right: width * 0.09,
                                                 top: width * 0.07),
                                             child: SvgPicture.asset(
-                                              "images/selfservice.svg",
+                                              "images/sell.svg",
                                               color: Colors.amber,
                                             ),
                                           ),

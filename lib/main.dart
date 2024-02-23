@@ -1,30 +1,31 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:m_commerce/pages/home/home.dart';
 import 'package:m_commerce/pages/login/loginpage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(
+      child: MyApp(
+    isLoggedIn: isLoggedIn,
+  )));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  final bool isLoggedIn;
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+  const MyApp({super.key, required this.isLoggedIn});
 
-class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,9 +44,7 @@ class _MyAppState extends State<MyApp> {
             duration: 3000,
             backgroundColor: Colors.white,
             splashTransition: SplashTransition.slideTransition,
-            nextScreen: FirebaseAuth.instance.currentUser == null
-                ? const LoginPage()
-                : const Home()),
+            nextScreen: isLoggedIn ? const Home() : const LoginPage()),
       ),
     );
   }

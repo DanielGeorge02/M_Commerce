@@ -1,7 +1,6 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, missing_required_param
 
 import 'package:flutter/material.dart';
-import 'package:m_commerce/pages/login/registerpage.dart';
 import 'package:m_commerce/pages/login/userType.dart';
 
 class LoginPage extends StatefulWidget {
@@ -159,6 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => UserType(
+                                            register: false,
                                             email: emailcontroller.text,
                                             password: passwordcontroller.text,
                                           )));

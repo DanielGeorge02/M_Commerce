@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks
+// ignore_for_file: unrelated_type_equality_checks, deprecated_member_use
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +10,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:m_commerce/pages/Post.dart';
 import 'package:m_commerce/pages/Rent_page/rent_post.dart';
-import 'package:m_commerce/pages/home/chatlobby.dart';
 import 'package:m_commerce/pages/home/drawer.dart';
 import 'package:m_commerce/pages/home/Search.dart';
 import 'package:m_commerce/pages/login/rent_splash.dart';

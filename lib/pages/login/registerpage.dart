@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, must_be_immutable, prefer_typing_uninitialized_variables, avoid_print
 
 import 'dart:convert';
-import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csc_picker/csc_picker.dart';
@@ -52,28 +51,15 @@ class _RegisterState extends ConsumerState<Register> {
   TextEditingController shopname = TextEditingController();
 
   late double height, width;
-  DateTime now = DateTime.now();
-  var r = Random();
-  String unique = "";
-
   bool success = true;
   int count = 0;
   var jsondata;
+  String userType = "";
 
-  senddata() async {
-    final CollectionReference = FirebaseFirestore.instance
-        .collection("No. of Users")
-        .doc(emailcontroller.text);
-    return CollectionReference.set({
-      "Name": namecontroller.text,
-      "email": emailcontroller.text,
-      "phone number": phonecontroller.text
-    }).catchError((onError) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("ERROR ${onError.toString()}"),
-        behavior: SnackBarBehavior.floating,
-      ));
-    });
+  @override
+  void initState() {
+    super.initState();
+    userType = ref.read(userTypeProvider);
   }
 
   Future<bool> getRequest() async {
@@ -103,93 +89,81 @@ class _RegisterState extends ConsumerState<Register> {
   }
 
   Future Register() async {
-    if (ref.read(uniqueId) == "") {
-      unique = now.hour.toString() +
-          now.minute.toString() +
-          now.second.toString() +
-          String.fromCharCodes(
-              List.generate(5, (index) => r.nextInt(33) + 89)) +
-          r.nextInt(1000).toString();
+    DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
+        .instance
+        .collection("No. of Users")
+        .doc(emailcontroller.text + userType)
+        .get();
+
+    print(".................................................");
+
+    if (userData.exists) {
+      print(
+          "user Exists......................................................");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('User already exists!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else {
       var collectionreference = FirebaseFirestore.instance
           .collection("No. of Users")
-          .doc(unique)
-          .collection(ref.read(userTypeProvider).toString())
-          .doc(FirebaseAuth.instance.currentUser!.email);
+          .doc(emailcontroller.text + userType);
+      print(
+          "user doesnt Exists......................................................");
 
       return ref.read(userTypeProvider) == "Customer"
-          ? collectionreference
-              .set({"email": emailcontroller, "password": passwordcontroller})
+          ? collectionreference.set({
+              "email": emailcontroller.text,
+              "password": passwordcontroller.text
+            })
           : ref.read(userTypeProvider) == "Shop_Owner"
               ? collectionreference.set({
-                  "email": emailcontroller,
-                  "password": passwordcontroller,
-                  "seller_name": namecontroller,
-                  "shop_name": shopname,
-                  "gst": gstcontroller,
-                  "address": addresscontroller,
+                  "email": emailcontroller.text,
+                  "password": passwordcontroller.text,
+                  "seller_name": namecontroller.text,
+                  "shop_name": shopname.text,
+                  "gst": gstcontroller.text,
+                  "address": addresscontroller.text,
                   "city": city,
                   "state": state
                 })
               : ref.read(userTypeProvider) == "Self_Service"
                   ? collectionreference.set({
-                      "email": emailcontroller,
-                      "password": passwordcontroller,
-                      "name": namecontroller,
-                      "address": addresscontroller,
+                      "email": emailcontroller.text,
+                      "password": passwordcontroller.text,
+                      "name": namecontroller.text,
+                      "address": addresscontroller.text,
                       "city": city,
                       "state": state
                     })
                   : collectionreference.set({
-                      "email": emailcontroller,
-                      "password": passwordcontroller,
-                      "seller_name": namecontroller,
-                      "address": addresscontroller,
+                      "email": emailcontroller.text,
+                      "password": passwordcontroller.text,
+                      "seller_name": namecontroller.text,
+                      "address": addresscontroller.text,
                       "city": city,
                       "state": state
-                    }).then((value) => FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                        email: emailcontroller.text,
-                        password: passwordcontroller.text,
-                      )
-                          .then((value) async {
-                        final user = FirebaseAuth.instance.currentUser;
-                        await user?.updateDisplayName(namecontroller.text);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Home()));
-                      }));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please fill all the fields")));
+                    })
+                      // .then((value) => FirebaseAuth.instance
+                      //       .createUserWithEmailAndPassword(
+                      //     email: emailcontroller.text,
+                      //     password: passwordcontroller.text,
+
+                      //   )
+                      .then((value) async {
+                      print(
+                          "...........................................................");
+                      final user = FirebaseAuth.instance.currentUser;
+                      await user?.updateDisplayName(namecontroller.text);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Home()));
+                    });
     }
   }
-
-  // Future<void> signInWithEmailPassword(String email, String password) async {
-  //   try {
-  //     UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-  //       email: email,
-  //       password: password,
-  //     );
-
-  //     // Check if user exists in Firestore
-  //     DocumentSnapshot<Map<String, dynamic>> userData = await _firestore
-  //         .collection('users')
-  //         .doc(userCredential.user!.uid)
-  //         .get();
-
-  //     if (userData.exists) {
-  //       // User data exists in Firestore, do something (e.g., navigate to home screen)
-  //       print('User data exists in Firestore: ${userData.data()}');
-  //     } else {
-  //       // User data does not exist in Firestore
-  //       print('User data does not exist in Firestore');
-  //     }
-  //   } catch (e) {
-  //     print('Error signing in: $e');
-  //     // Handle sign-in errors (e.g., show error message to user)
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -846,24 +820,6 @@ class _RegisterState extends ConsumerState<Register> {
                                         ),
                                       ],
                                     ),
-
-                          // Align(
-                          //   alignment: Alignment.centerRight,
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.only(top: 10, right: 17),
-                          //     child: TextButton(
-                          //         style: ButtonStyle(
-                          //           overlayColor: MaterialStateColor.resolveWith(
-                          //               //no splash for textbutton
-                          //               (states) => Colors.transparent),
-                          //         ),
-                          //         onPressed: () {},
-                          //         child: const Text(
-                          //           "Forget Password?",
-                          //           style: TextStyle(color: Colors.black),
-                          //         )),
-                          //   ),
-                          // ),
                           const SizedBox(
                             height: 25,
                           ),
@@ -871,33 +827,7 @@ class _RegisterState extends ConsumerState<Register> {
                             padding: const EdgeInsets.symmetric(vertical: 30),
                             child: TextButton(
                               onPressed: () {
-                                // if (emailcontroller.text.isNotEmpty &&
-                                //     namecontroller.text.isNotEmpty &&
-                                //     phonecontroller.text.isNotEmpty &&
-                                //     passwordcontroller.text.isNotEmpty)
-                                //  {
-                                // senddata();
-                                // FirebaseAuth.instance
-                                //     .createUserWithEmailAndPassword(
-                                //         email: emailcontroller.text,
-                                //         password: passwordcontroller.text)
-                                //     .then((value) async {
-                                //   final user =
-                                //       FirebaseAuth.instance.currentUser;
-                                //   await user
-                                //       ?.updateDisplayName(namecontroller.text);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Home()));
-                                // }
-
-                                // else {
-                                //   ScaffoldMessenger.of(context).showSnackBar(
-                                //       const SnackBar(
-                                //           content: Text(
-                                //               "Please fill all the fields")));
-                                // }
+                                Register();
                               },
                               style: TextButton.styleFrom(
                                   fixedSize: const Size(360, 50),
