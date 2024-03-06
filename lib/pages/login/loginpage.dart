@@ -1,16 +1,17 @@
 // ignore_for_file: use_build_context_synchronously, missing_required_param
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:m_commerce/pages/login/userType.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
   late double height, width;
@@ -154,6 +155,8 @@ class _LoginPageState extends State<LoginPage> {
                           padding: EdgeInsets.only(top: height * 0.01),
                           child: TextButton(
                             onPressed: () {
+                              ref.read(emailProvider.notifier).state =
+                                  emailcontroller.text;
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

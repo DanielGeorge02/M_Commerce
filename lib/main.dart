@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:m_commerce/pages/home/home.dart';
 import 'package:m_commerce/pages/login/loginpage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:m_commerce/pages/login/userType.dart';
 import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,10 +22,28 @@ void main() async {
   )));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerStatefulWidget {
   final bool isLoggedIn;
 
   const MyApp({super.key, required this.isLoggedIn});
+
+  @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  Future<void> getSharedPreferenceValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    ref.read(emailProvider.notifier).state = prefs.getString('email') ?? '';
+    ref.read(userTypeProvider.notifier).state =
+        prefs.getString('userType') ?? '';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSharedPreferenceValue();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +63,7 @@ class MyApp extends StatelessWidget {
             duration: 3000,
             backgroundColor: Colors.white,
             splashTransition: SplashTransition.slideTransition,
-            nextScreen: isLoggedIn ? const Home() : const LoginPage()),
+            nextScreen: widget.isLoggedIn ? const Home() : const LoginPage()),
       ),
     );
   }

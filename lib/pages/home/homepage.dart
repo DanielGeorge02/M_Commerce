@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks, deprecated_member_use
+// ignore_for_file: unrelated_type_equality_checks, deprecated_member_use, avoid_print
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +15,7 @@ import 'package:m_commerce/pages/home/Search.dart';
 import 'package:m_commerce/pages/login/rent_splash.dart';
 import 'package:m_commerce/pages/login/userType.dart';
 import 'package:m_commerce/pages/viewproduct.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../category/seeAll.dart';
 import 'package:animated_background/animated_background.dart';
 
@@ -52,8 +53,21 @@ class _HomepageState extends ConsumerState<Homepage>
   @override
   void initState() {
     getData();
+    getUserData();
     super.initState();
     // print(upl_image[0][image]);
+  }
+
+  String? email = "";
+  String? user = "";
+
+  void getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    ref.read(emailProvider.notifier).state = prefs.getString('email')!;
+    ref.read(userTypeProvider.notifier).state = prefs.getString('userType')!;
+    print('Email ID: $email');
+    print('Email ID: $user');
+    print(email! + user!);
   }
 
   Widget _buildCategory({required String name, required String photo}) {
@@ -217,7 +231,14 @@ class _HomepageState extends ConsumerState<Homepage>
           //           MaterialPageRoute(builder: (context) => const ChatLobby()));
           //     },
           //     icon: const Icon(Icons.chat)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
+          IconButton(
+              onPressed: () {
+                print(ref.read(emailProvider));
+              },
+              icon: const Icon(
+                Icons.notifications,
+                color: Colors.white,
+              )),
         ],
       ),
       drawer: const MainDrawer(),
@@ -528,7 +549,19 @@ class _HomepageState extends ConsumerState<Homepage>
                                   width: width * 0.9,
                                   image: const AssetImage(
                                       "images/sellbanner.webp")),
-                            ))
+                            )),
+                        // TextButton(
+                        //     onPressed: () async {
+                        //       FirebaseAuth.instance.signOut();
+                        //       SharedPreferences prefs =
+                        //           await SharedPreferences.getInstance();
+                        //       await prefs.remove('isLoggedIn');
+                        //       Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //               builder: (context) => const LoginPage()));
+                        //     },
+                        //     child: Text("hhhhh"))
                       ],
                     ),
                   ),
@@ -582,43 +615,52 @@ class _HomepageState extends ConsumerState<Homepage>
                 ),
               ],
             )
-          : SpeedDial(
-              backgroundColor: Colors.amber,
-              elevation: 30,
-              activeBackgroundColor: const Color.fromARGB(255, 211, 210, 210),
-              activeForegroundColor: Colors.amber,
-              activeIcon: Icons.close,
-              children: [
-                SpeedDialChild(
-                    child: const Icon(Icons.shopping_cart_checkout_rounded),
-                    foregroundColor: Colors.amber,
-                    backgroundColor: Colors.black,
-                    label: 'Upload your Shop Rental Products',
-                    elevation: 20,
-                    onTap: (() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Rent_post()));
-                    })),
-                SpeedDialChild(
-                    child: const Icon(Icons.upload),
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.amber,
-                    elevation: 20,
-                    label: 'Upload your Shop Products',
-                    onTap: (() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Post()));
-                    }))
-              ],
-              child: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-            ),
+          : ref.read(userTypeProvider) == "Self_Service"
+              ? FloatingActionButton(
+                  backgroundColor: Colors.amber,
+                  child: const Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: ((context) => const Post())));
+                  })
+              : SpeedDial(
+                  backgroundColor: Colors.amber,
+                  elevation: 30,
+                  activeBackgroundColor:
+                      const Color.fromARGB(255, 211, 210, 210),
+                  activeForegroundColor: Colors.amber,
+                  activeIcon: Icons.close,
+                  children: [
+                    SpeedDialChild(
+                        child: const Icon(Icons.shopping_cart_checkout_rounded),
+                        foregroundColor: Colors.amber,
+                        backgroundColor: Colors.black,
+                        label: 'Upload your Shop Rental Products',
+                        elevation: 20,
+                        onTap: (() {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Rent_post()));
+                        })),
+                    SpeedDialChild(
+                        child: const Icon(Icons.upload),
+                        foregroundColor: Colors.black,
+                        backgroundColor: Colors.amber,
+                        elevation: 20,
+                        label: 'Upload your Shop Products',
+                        onTap: (() {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Post()));
+                        }))
+                  ],
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
     );
   }
 }

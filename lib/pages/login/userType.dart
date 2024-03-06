@@ -13,7 +13,7 @@ import 'package:m_commerce/pages/login/registerpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final userTypeProvider = StateProvider<String>((ref) => "");
-final uniqueId = StateProvider<String>((ref) => "");
+final emailProvider = StateProvider<String>((ref) => "");
 
 class UserType extends ConsumerStatefulWidget {
   var email;
@@ -43,7 +43,7 @@ class _UserTypeState extends ConsumerState<UserType>
   }
 
   Future signIn(String userType) async {
-    print(userType);
+    print(ref.read(userTypeProvider));
     print("..................................................");
     DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
         .instance
@@ -68,7 +68,11 @@ class _UserTypeState extends ConsumerState<UserType>
               backgroundColor: Colors.amber.shade200,
             ));
           });
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      prefs.setString('email', ref.read(emailProvider).toString());
+      prefs.setString("userType", ref.read(userTypeProvider).toString());
       await prefs.setBool('isLoggedIn', true);
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const Home()));

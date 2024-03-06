@@ -4,12 +4,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csc_picker/csc_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:m_commerce/pages/home/home.dart';
 import 'package:m_commerce/pages/login/loginpage.dart';
 import 'package:m_commerce/pages/login/userType.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Register extends ConsumerStatefulWidget {
   var type;
@@ -46,6 +46,7 @@ class _RegisterState extends ConsumerState<Register> {
   TextEditingController phonecontroller = TextEditingController();
   TextEditingController gstcontroller = TextEditingController();
   TextEditingController addresscontroller = TextEditingController();
+  TextEditingController PnoController = TextEditingController();
   String? state;
   String? city;
   TextEditingController shopname = TextEditingController();
@@ -60,6 +61,7 @@ class _RegisterState extends ConsumerState<Register> {
   void initState() {
     super.initState();
     userType = ref.read(userTypeProvider);
+    print(ref.read(userTypeProvider));
   }
 
   Future<bool> getRequest() async {
@@ -89,6 +91,12 @@ class _RegisterState extends ConsumerState<Register> {
   }
 
   Future Register() async {
+    ref.read(emailProvider.notifier).state = emailcontroller.text;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('userType', userType);
+    prefs.setString('email', ref.read(emailProvider).toString());
+
     DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
         .instance
         .collection("No. of Users")
@@ -116,47 +124,47 @@ class _RegisterState extends ConsumerState<Register> {
       return ref.read(userTypeProvider) == "Customer"
           ? collectionreference.set({
               "email": emailcontroller.text,
-              "password": passwordcontroller.text
+              "password": passwordcontroller.text,
+              "name": namecontroller.text,
+              "image": ""
             })
           : ref.read(userTypeProvider) == "Shop_Owner"
               ? collectionreference.set({
                   "email": emailcontroller.text,
                   "password": passwordcontroller.text,
-                  "seller_name": namecontroller.text,
+                  "name": namecontroller.text,
+                  "phone": PnoController.text,
                   "shop_name": shopname.text,
                   "gst": gstcontroller.text,
                   "address": addresscontroller.text,
                   "city": city,
-                  "state": state
+                  "state": state,
+                  "image": ""
                 })
               : ref.read(userTypeProvider) == "Self_Service"
                   ? collectionreference.set({
                       "email": emailcontroller.text,
                       "password": passwordcontroller.text,
                       "name": namecontroller.text,
+                      "phone": PnoController.text,
                       "address": addresscontroller.text,
                       "city": city,
-                      "state": state
+                      "state": state,
+                      "image": ""
                     })
                   : collectionreference.set({
                       "email": emailcontroller.text,
                       "password": passwordcontroller.text,
-                      "seller_name": namecontroller.text,
+                      "name": namecontroller.text,
+                      "phone": PnoController.text,
                       "address": addresscontroller.text,
                       "city": city,
-                      "state": state
-                    })
-                      // .then((value) => FirebaseAuth.instance
-                      //       .createUserWithEmailAndPassword(
-                      //     email: emailcontroller.text,
-                      //     password: passwordcontroller.text,
-
-                      //   )
-                      .then((value) async {
+                      "state": state,
+                      "image": ""
+                    }).then((value) async {
                       print(
                           "...........................................................");
-                      final user = FirebaseAuth.instance.currentUser;
-                      await user?.updateDisplayName(namecontroller.text);
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -435,6 +443,36 @@ class _RegisterState extends ConsumerState<Register> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 25.0),
                                           child: TextField(
+                                            controller: namecontroller,
+                                            decoration: InputDecoration(
+                                                prefixIcon: const Icon(
+                                                  Icons.phone,
+                                                  color: Colors.black,
+                                                ),
+                                                labelText: "PHONE NUMBER",
+                                                labelStyle: const TextStyle(
+                                                    color: Colors.black),
+                                                enabledBorder:
+                                                    const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white),
+                                                ),
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color:
+                                                                Colors.white)),
+                                                fillColor: Colors.grey.shade200,
+                                                filled: true),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 25,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 25.0),
+                                          child: TextField(
                                             controller: phonecontroller,
                                             decoration: InputDecoration(
                                                 prefixIcon: const Icon(
@@ -592,6 +630,36 @@ class _RegisterState extends ConsumerState<Register> {
                                                   color: Colors.black,
                                                 ),
                                                 labelText: "NAME",
+                                                labelStyle: const TextStyle(
+                                                    color: Colors.black),
+                                                enabledBorder:
+                                                    const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white),
+                                                ),
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color:
+                                                                Colors.white)),
+                                                fillColor: Colors.grey.shade200,
+                                                filled: true),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 25,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 25.0),
+                                          child: TextField(
+                                            controller: namecontroller,
+                                            decoration: InputDecoration(
+                                                prefixIcon: const Icon(
+                                                  Icons.phone,
+                                                  color: Colors.black,
+                                                ),
+                                                labelText: "PHONE NUMBER",
                                                 labelStyle: const TextStyle(
                                                     color: Colors.black),
                                                 enabledBorder:
