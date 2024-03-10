@@ -615,13 +615,16 @@ class _HomepageState extends ConsumerState<Homepage>
                 ),
               ],
             )
-          : ref.read(userTypeProvider) == "Self_Service"
+          : ref.read(userTypeProvider) == "Self_Service" ||
+                  ref.read(userTypeProvider) == "Private_Seller"
               ? FloatingActionButton(
                   backgroundColor: Colors.amber,
                   child: const Icon(Icons.add),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: ((context) => const Post())));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => const Post())));
                   })
               : SpeedDial(
                   backgroundColor: Colors.amber,

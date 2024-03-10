@@ -25,11 +25,10 @@ class _MainDrawerState extends ConsumerState<MainDrawer> {
   File? _image;
 
   Future getImage(ImageSource gallery) async {
-
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return;
     final imageTemporary = File(image.path);
-    
+
     setState(() {
       _image = imageTemporary;
     });
@@ -83,7 +82,7 @@ class _MainDrawerState extends ConsumerState<MainDrawer> {
                       }
                     : data = {
                         'email': data['email'],
-                        'name': data['seller_name'],
+                        'name': data['name'],
                         'address': data['address'],
                         'city': data['city'],
                         'state': data['state'],
@@ -179,6 +178,7 @@ class _MainDrawerState extends ConsumerState<MainDrawer> {
                                                 index == data.length - 2
                                         ? null
                                         : ListTile(
+                                            leading: Icon(icon[index]),
                                             title: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
