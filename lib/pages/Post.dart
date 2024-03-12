@@ -24,12 +24,34 @@ class Post extends ConsumerStatefulWidget {
 
 class _PostState extends ConsumerState<Post>
     with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(duration: const Duration(seconds: 3), vsync: this);
+    controller.addStatusListener((status) async {
+      if (status == AnimationStatus.completed) {
+        Navigator.pop(context);
+        controller.reset();
+      }
+    });
+    getData();
+    // if (ref.read(serviceProvider) != "") {
+    //   servicetype = ref.read(serviceProvider);
+    // }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   File? file;
   var colour = 0;
   Color currentColor = Colors.green;
   bool no_color = false;
   List<Color> currentColors = [Colors.yellow, Colors.red];
-  String servicetype = "";
 
   Map<String, dynamic> serviceMap() {
     return {
@@ -80,6 +102,7 @@ class _PostState extends ConsumerState<Post>
     "Chef",
     "Carpenter",
     "Driver",
+    "House Builder"
   ];
 
   void changeColor(Color color) => setState(() => currentColor = color);
@@ -104,13 +127,25 @@ class _PostState extends ConsumerState<Post>
     "city": "",
     "state": "",
   };
-  Map<String, String> privatedata = {
-    "email": "",
-    "password": "",
-    "seller_name": "",
-    "address": "",
-    "city": "",
-  };
+  Map<String, dynamic> privateMap() {
+    return {
+      "name": SnameController.text,
+      "email": emailcontroller.text,
+      "address": AddrController.text,
+      "city": city,
+      "state": state,
+      "Category": category,
+      "Ptype": product_type,
+      "days": dayscontroller.text,
+      "color": colors(chosenColor),
+      "Quantity": QuantityController.text,
+      "MRP": MrpController.text,
+      "Price": PpriceController.text,
+      "Pdescription": PdesController.text,
+      "image": url
+    };
+  }
+
   void getData() async {
     DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
         .instance
@@ -152,27 +187,8 @@ class _PostState extends ConsumerState<Post>
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    controller =
-        AnimationController(duration: const Duration(seconds: 3), vsync: this);
-    controller.addStatusListener((status) async {
-      if (status == AnimationStatus.completed) {
-        Navigator.pop(context);
-        controller.reset();
-      }
-    });
-    getData();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
   String? category;
+  String? servicetype;
   String? state = "";
   String? city = "";
   TextEditingController SnameController = TextEditingController();
@@ -188,6 +204,7 @@ class _PostState extends ConsumerState<Post>
   TextEditingController Gstcontroller = TextEditingController();
   TextEditingController expericontroller = TextEditingController();
   TextEditingController servdescontroller = TextEditingController();
+  TextEditingController dayscontroller = TextEditingController();
   String url = "";
   late int lastkey;
 
@@ -231,38 +248,44 @@ class _PostState extends ConsumerState<Post>
         .collection("Waiting_list")
         .doc("Products")
         .collection(ref.read(userTypeProvider))
-        .doc(ref.read(emailProvider) + servicetype);
+        .doc(ref.read(emailProvider) + servicetype!);
 
     return ref.read(userTypeProvider) == "Self_Service"
         ? collectionreference
-            .set({servicetype: serviceMap()})
+            .set({servicetype!: serviceMap()})
             .then((value) => showSuccessful())
             .then((value) => Navigator.of(context).pop())
-        : collectionreference
-            .set({
-              "SnameController": SnameController.text,
-              "PnoController": PnoController.text,
-              "AddrController": AddrController.text,
-              "PnameController": PnameController.text,
-              "categoryController": category,
-              "PdesController": PdesController.text,
-              "MrpController": MrpController.text,
-              "PpriceController": PpriceController.text,
-              "emailController": emailcontroller.text,
-              "shopController": ShopController.text,
-              "QuantityController": QuantityController.text,
-              "GstController": Gstcontroller.text,
-              "Ptype": product_type,
-              "Colour": colors(chosenColor),
-              "state": state,
-              "email": emailcontroller.text,
-              "city": city,
-              "image": url,
-              "id": collectionreference.id,
-              "date": DateFormat('kk:mm:ss EEE d MMM').format(now).toString()
-            })
-            .then((value) => showSuccessful())
-            .then((value) => Navigator.of(context).pop());
+        : ref.read(userTypeProvider) == "Private_Seller"
+            ? collectionreference
+                .set({"privateProduct": privateMap()})
+                .then((value) => showSuccessful())
+                .then((value) => Navigator.of(context).pop())
+            : collectionreference
+                .set({
+                  "SnameController": SnameController.text,
+                  "PnoController": PnoController.text,
+                  "AddrController": AddrController.text,
+                  "PnameController": PnameController.text,
+                  "categoryController": category,
+                  "PdesController": PdesController.text,
+                  "MrpController": MrpController.text,
+                  "PpriceController": PpriceController.text,
+                  "emailController": emailcontroller.text,
+                  "shopController": ShopController.text,
+                  "QuantityController": QuantityController.text,
+                  "GstController": Gstcontroller.text,
+                  "Ptype": product_type,
+                  "Colour": colors(chosenColor),
+                  "state": state,
+                  "email": emailcontroller.text,
+                  "city": city,
+                  "image": url,
+                  "id": collectionreference.id,
+                  "date":
+                      DateFormat('kk:mm:ss EEE d MMM').format(now).toString()
+                })
+                .then((value) => showSuccessful())
+                .then((value) => Navigator.of(context).pop());
   }
 
   List chosenColor = [];
@@ -489,7 +512,7 @@ class _PostState extends ConsumerState<Post>
                               borderRadius: BorderRadius.circular(20),
                               hint: const Text("Service"),
                               isExpanded: true,
-                              value: category,
+                              value: servicetype,
                               items: service.map(buildMenuItem).toList(),
                               onChanged: (value) => setState(() {
                                     servicetype = value!;
@@ -864,7 +887,7 @@ class _PostState extends ConsumerState<Post>
                                   child: Column(
                                     children: [
                                       TextFormField(
-                                        controller: ShopController,
+                                        controller: dayscontroller,
                                         decoration: const InputDecoration(
                                             prefixIcon: Icon(
                                               Icons.timelapse_outlined,
@@ -1138,7 +1161,7 @@ class _PostState extends ConsumerState<Post>
                             padding: const EdgeInsets.only(top: 14.0),
                             child: TextFormField(
                               maxLines: 4,
-                              controller: servdescontroller,
+                              controller: PdesController,
                               decoration: const InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.badge_outlined,

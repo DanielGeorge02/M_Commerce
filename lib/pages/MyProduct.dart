@@ -2,19 +2,20 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:m_commerce/pages/login/userType.dart';
 import 'package:m_commerce/pages/update.dart';
 import 'package:m_commerce/pages/viewproduct.dart';
 import 'package:intl/intl.dart';
 
-class MyProduct extends StatefulWidget {
+class MyProduct extends ConsumerStatefulWidget {
   const MyProduct({super.key});
 
   @override
-  State<MyProduct> createState() => _MyProductState();
+  ConsumerState<MyProduct> createState() => _MyProductState();
 }
 
 String formattedDate(timestramp) {
@@ -23,7 +24,8 @@ String formattedDate(timestramp) {
   return DateFormat('dd-MM-yyyy hh:mm a').format(dateFromTimeStramp);
 }
 
-class _MyProductState extends State<MyProduct> {
+class _MyProductState extends ConsumerState<MyProduct> {
+  @override
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -57,8 +59,7 @@ class _MyProductState extends State<MyProduct> {
                   .collection("Seller_req")
                   .doc("Products")
                   .collection("item")
-                  .where("email",
-                      isEqualTo: FirebaseAuth.instance.currentUser!.email)
+                  .where("email", isEqualTo: ref.read(emailProvider).toString())
                   .get(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {

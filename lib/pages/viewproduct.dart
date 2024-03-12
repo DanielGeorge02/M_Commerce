@@ -4,14 +4,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:m_commerce/pages/chat.dart';
 import 'package:m_commerce/pages/home/Search.dart';
+import 'package:m_commerce/pages/login/userType.dart';
 import 'package:m_commerce/pages/shoppage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class ViewProduct extends StatefulWidget {
+class ViewProduct extends ConsumerStatefulWidget {
   var image;
   var name;
   var des;
@@ -20,7 +22,6 @@ class ViewProduct extends StatefulWidget {
   var addr;
   var quan;
   var email;
-  var currentuser;
   var shop;
   var type;
   List<dynamic> color;
@@ -34,16 +35,15 @@ class ViewProduct extends StatefulWidget {
       this.old,
       this.quan,
       this.email,
-      this.currentuser,
       this.type,
       required this.color,
       this.shop});
 
   @override
-  State<ViewProduct> createState() => _ViewProductState();
+  ConsumerState<ViewProduct> createState() => _ViewProductState();
 }
 
-class _ViewProductState extends State<ViewProduct>
+class _ViewProductState extends ConsumerState<ViewProduct>
     with SingleTickerProviderStateMixin {
   static Future<void> openMAp(String addr) async {
     String googlemapUrl =
@@ -66,9 +66,12 @@ class _ViewProductState extends State<ViewProduct>
     "Support Policy"
   ];
 
+  String? currentUser;
+
   @override
   void initState() {
     super.initState();
+    currentUser = ref.read(emailProvider);
     controller =
         AnimationController(duration: const Duration(seconds: 3), vsync: this);
     controller.addStatusListener((status) async {
@@ -86,11 +89,13 @@ class _ViewProductState extends State<ViewProduct>
   }
 
   Future addtocart() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    var currentUser = auth.currentUser;
     CollectionReference collectionref =
         FirebaseFirestore.instance.collection("cart_item");
-    return collectionref.doc(currentUser!.email).collection("item").doc().set({
+    return collectionref
+        .doc(ref.read(emailProvider))
+        .collection("item")
+        .doc()
+        .set({
       'PnameController': widget.name,
       'PpriceController': widget.New,
       'image': widget.image,
@@ -105,11 +110,13 @@ class _ViewProductState extends State<ViewProduct>
   }
 
   Future addtoFavorite() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    var currentUser = auth.currentUser;
     CollectionReference collectionref =
         FirebaseFirestore.instance.collection("Favorite_item");
-    return collectionref.doc(currentUser!.email).collection("item").doc().set({
+    return collectionref
+        .doc(ref.read(emailProvider))
+        .collection("item")
+        .doc()
+        .set({
       'PnameController': widget.name,
       'PpriceController': widget.New,
       'image': widget.image,
@@ -194,11 +201,6 @@ class _ViewProductState extends State<ViewProduct>
           ));
   int quantity = 0;
 
-  CollectionReference users = FirebaseFirestore.instance
-      .collection("Favorite_item")
-      .doc(FirebaseAuth.instance.currentUser!.email.toString())
-      .collection("item");
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -266,7 +268,10 @@ class _ViewProductState extends State<ViewProduct>
                           width: width,
                           child: CachedNetworkImage(imageUrl: widget.image)),
                       FutureBuilder(
-                        future: users
+                        future: FirebaseFirestore.instance
+                            .collection("Favorite_item")
+                            .doc(currentUser)
+                            .collection("item")
                             .where("PnameController", isEqualTo: widget.name)
                             .get(),
                         builder:
@@ -345,10 +350,10 @@ class _ViewProductState extends State<ViewProduct>
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Chat(
-                                          chatroomkey:
-                                              widget.email + widget.currentuser,
+                                          chatroomkey: widget.email +
+                                              ref.read(emailProvider),
                                           shop: widget.email,
-                                          user: widget.currentuser,
+                                          user: ref.read(emailProvider),
                                         )));
                           },
                           style: ButtonStyle(
@@ -358,8 +363,12 @@ class _ViewProductState extends State<ViewProduct>
                                       borderRadius: BorderRadius.circular(20))),
                               backgroundColor:
                                   const MaterialStatePropertyAll(Colors.amber)),
-                          icon: const Icon(Icons.message),
-                          label: const Text("Message")),
+                          icon: const Icon(
+                            Icons.message,
+                            color: Colors.white,
+                          ),
+                          label: const Text("Message",
+                              style: TextStyle(color: Colors.white))),
                       ElevatedButton.icon(
                           onPressed: () {
                             openMAp(widget.addr);
@@ -371,8 +380,10 @@ class _ViewProductState extends State<ViewProduct>
                                       borderRadius: BorderRadius.circular(20))),
                               backgroundColor:
                                   const MaterialStatePropertyAll(Colors.red)),
-                          icon: const Icon(Icons.location_on),
-                          label: const Text("Location")),
+                          icon: const Icon(Icons.location_on,
+                              color: Colors.white),
+                          label: const Text("Location",
+                              style: TextStyle(color: Colors.white))),
                       ElevatedButton.icon(
                           onPressed: () {},
                           style: ButtonStyle(
@@ -382,8 +393,11 @@ class _ViewProductState extends State<ViewProduct>
                                       borderRadius: BorderRadius.circular(20))),
                               backgroundColor:
                                   const MaterialStatePropertyAll(Colors.green)),
-                          icon: const Icon(Icons.share),
-                          label: const Text("Share")),
+                          icon: const Icon(Icons.share, color: Colors.white),
+                          label: const Text(
+                            "Share",
+                            style: TextStyle(color: Colors.white),
+                          )),
                     ],
                   ),
                 ),
@@ -424,7 +438,6 @@ class _ViewProductState extends State<ViewProduct>
                 Padding(
                   padding: EdgeInsets.all(height * 0.01),
                   child: Container(
-                    // height: height * 0.12,
                     width: width,
                     constraints:
                         const BoxConstraints(maxHeight: double.infinity),
@@ -522,11 +535,6 @@ class _ViewProductState extends State<ViewProduct>
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: width * 0.02),
                   child: Container(
-                    // height: 100,
-                    // constraints: const BoxConstraints(
-                    //     maxHeight: double.infinity,
-                    //     maxWidth: double.infinity,
-                    //     minHeight: 100),
                     width: width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
@@ -592,7 +600,7 @@ class _ViewProductState extends State<ViewProduct>
         floatingActionButton: FutureBuilder(
           future: FirebaseFirestore.instance
               .collection("cart_item")
-              .doc(FirebaseAuth.instance.currentUser!.email)
+              .doc(ref.read(emailProvider))
               .collection("item")
               .where("PnameController", isNotEqualTo: widget.name)
               .get(),
@@ -600,12 +608,9 @@ class _ViewProductState extends State<ViewProduct>
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             try {
               if (snapshot.connectionState == ConnectionState.done) {
-                // Handle the completed state and use the snapshot data
                 if (snapshot.hasData) {
-                  // Your logic to check if the document exists and decide whether to show the button
                   var documents = snapshot.data!.docs;
-                  bool showButton = documents
-                      .isEmpty; // Adjust this condition based on your needs
+                  bool showButton = documents.isEmpty;
 
                   return Theme(
                     data: Theme.of(context).copyWith(
@@ -627,13 +632,11 @@ class _ViewProductState extends State<ViewProduct>
                         : Container(),
                   );
                 } else if (snapshot.hasError) {
-                  // Handle the error state
                   print(snapshot.error);
                   return Container();
                 }
               }
-              // Handle other connection states
-              return const CircularProgressIndicator(); // Or any other loading indicator
+              return const CircularProgressIndicator();
             } catch (e) {
               print(e);
               return Container();

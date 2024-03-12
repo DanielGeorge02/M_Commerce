@@ -4,24 +4,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:csc_picker/csc_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:m_commerce/pages/Filter.dart';
+import 'package:m_commerce/pages/login/userType.dart';
 
 import '../viewproduct.dart';
 
-class CategoryPage extends StatefulWidget {
+class CategoryPage extends ConsumerStatefulWidget {
   CategoryPage({super.key, this.category, this.slider, this.city});
   var category;
   var slider;
   var city;
   @override
-  State<CategoryPage> createState() => _CategoryPageState();
+  ConsumerState<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _CategoryPageState extends ConsumerState<CategoryPage> {
   String? city;
   String? state;
   Future<void> showFilter() async {
@@ -204,10 +205,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 MaterialPageRoute(
                                     builder: (context) => ViewProduct(
                                         color: documentSnapshot['Colour'],
-                                        currentuser: FirebaseAuth
-                                            .instance.currentUser!.email
-                                            .toString(),
-                                        email: documentSnapshot["email"],
+                                        email: documentSnapshot['email'],
                                         New: documentSnapshot[
                                             'PpriceController'],
                                         des: documentSnapshot['PdesController'],

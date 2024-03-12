@@ -48,6 +48,8 @@ class _UserTypeState extends ConsumerState<UserType>
     DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
         .instance
         .collection("No. of Users")
+        .doc(widget.email)
+        .collection(userType)
         .doc(widget.email + userType)
         .get();
 

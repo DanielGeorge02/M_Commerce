@@ -96,9 +96,6 @@ class _FilterState extends State<Filters> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ViewProduct(
-                                          currentuser: FirebaseAuth
-                                              .instance.currentUser!.email
-                                              .toString(),
                                           color: documentSnapshot['Colour'],
                                           email: documentSnapshot["email"],
                                           New: documentSnapshot[

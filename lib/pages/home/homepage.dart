@@ -1,12 +1,15 @@
-// ignore_for_file: unrelated_type_equality_checks, deprecated_member_use, avoid_print
+// ignore_for_file: unrelated_type_equality_checks, deprecated_member_use, avoid_print, non_constant_identifier_names, duplicate_ignore
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:m_commerce/pages/Post.dart';
 import 'package:m_commerce/pages/Rent_page/rent_post.dart';
@@ -18,6 +21,8 @@ import 'package:m_commerce/pages/viewproduct.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../category/seeAll.dart';
 import 'package:animated_background/animated_background.dart';
+
+final serviceProvider = StateProvider<String>((ref) => "");
 
 class Homepage extends ConsumerStatefulWidget {
   const Homepage({super.key});
@@ -50,12 +55,24 @@ class _HomepageState extends ConsumerState<Homepage>
     return qn.docs;
   }
 
+  final Map<String, String> ServiceBanner = {
+    "Tailor": "images/tailor.webp",
+    "Nurse": "images/nurse.jpg",
+    "Beautician": "images/beautician.jpg",
+    "Technician": "images/technician.jpg",
+    "Electrician": "images/electrician.jpg",
+    "Plumber": "images/plumber.jpg",
+    "Chef": "images/chef.png",
+    "Carpenter": "images/carpenter.jpg",
+    "Driver": "images/driver.jpg",
+    "House Builder": "images/builder.jpg"
+  };
+
   @override
   void initState() {
     getData();
     getUserData();
     super.initState();
-    // print(upl_image[0][image]);
   }
 
   String? email = "";
@@ -69,6 +86,8 @@ class _HomepageState extends ConsumerState<Homepage>
     print('Email ID: $user');
     print(email! + user!);
   }
+
+  final ScrollController _scrollController = ScrollController();
 
   Widget _buildCategory({required String name, required String photo}) {
     double height = MediaQuery.of(context).size.height;
@@ -184,7 +203,7 @@ class _HomepageState extends ConsumerState<Homepage>
   }
 
   CollectionReference users =
-      FirebaseFirestore.instance.collection('User_data');
+      FirebaseFirestore.instance.collection('No. of Users');
 
   @override
   Widget build(BuildContext context) {
@@ -244,12 +263,15 @@ class _HomepageState extends ConsumerState<Homepage>
       drawer: const MainDrawer(),
       body: WillPopScope(
           onWillPop: () => _onbackbottonpressed(context),
-          child: userTypeProvider == "Customer"
+          child: ref.read(userTypeProvider) == "Customer"
               ? SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: FutureBuilder<DocumentSnapshot>(
                     future: users
-                        .doc(FirebaseAuth.instance.currentUser!.email)
+                        .doc(ref.read(emailProvider))
+                        .collection(ref.read(userTypeProvider))
+                        .doc(ref.read(emailProvider) +
+                            ref.read(userTypeProvider))
                         .get(),
                     builder: (BuildContext context,
                         AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -533,39 +555,152 @@ class _HomepageState extends ConsumerState<Homepage>
                       );
                     },
                   ))
-              : SingleChildScrollView(
-                  child: SizedBox(
-                    width: width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ClipRRect(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.symmetric(vertical: height * 0.02),
-                              child: Image(
-                                  width: width * 0.9,
-                                  image: const AssetImage(
-                                      "images/sellbanner.webp")),
-                            )),
-                        // TextButton(
-                        //     onPressed: () async {
-                        //       FirebaseAuth.instance.signOut();
-                        //       SharedPreferences prefs =
-                        //           await SharedPreferences.getInstance();
-                        //       await prefs.remove('isLoggedIn');
-                        //       Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(
-                        //               builder: (context) => const LoginPage()));
-                        //     },
-                        //     child: Text("hhhhh"))
-                      ],
-                    ),
-                  ),
-                )),
+              : ref.read(userTypeProvider) == "Self_Service"
+                  ? SingleChildScrollView(
+                      child: SizedBox(
+                        width: width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: height * 0.02),
+                                  child: Image(
+                                      width: width * 0.9,
+                                      image: const AssetImage(
+                                          "images/sellbanner.webp")),
+                                )),
+                            Padding(
+                              padding: EdgeInsets.only(left: width * 0.05),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Services",
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ListView(
+                              shrinkWrap: true,
+                              controller: _scrollController,
+                              reverse: true,
+                              children: ServiceBanner.entries.map((entry) {
+                                String name = entry.key;
+                                String imagePath = entry.value;
+                                return SingleChildScrollView(
+                                  child: InkWell(
+                                    onTap: () {
+                                      ref.read(serviceProvider.notifier).state =
+                                          name;
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Post()));
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: width * 0.05,
+                                          vertical: height * 0.015),
+                                      child: Column(
+                                        children: [
+                                          ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(20)),
+                                              child: Stack(
+                                                alignment:
+                                                    Alignment.bottomCenter,
+                                                children: [
+                                                  Image(
+                                                      height: height * 0.3,
+                                                      fit: BoxFit.fill,
+                                                      image: AssetImage(
+                                                          imagePath)),
+                                                  Container(
+                                                      height: height * 0.03,
+                                                      width: width,
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              129,
+                                                              255,
+                                                              255,
+                                                              255),
+                                                      child: Center(
+                                                          child: Text(
+                                                        name,
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                      )))
+                                                ],
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+
+                            // TextButton(
+                            //     onPressed: () async {
+                            //       FirebaseAuth.instance.signOut();
+                            //       SharedPreferences prefs =
+                            //           await SharedPreferences.getInstance();
+                            //       await prefs.remove('isLoggedIn');
+                            //       Navigator.push(
+                            //           context,
+                            //           MaterialPageRoute(
+                            //               builder: (context) => const LoginPage()));
+                            //     },
+                            //     child: Text("hhhhh"))
+                          ],
+                        ),
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      child: SizedBox(
+                        width: width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: height * 0.02),
+                                  child: Image(
+                                      width: width * 0.9,
+                                      image: const AssetImage(
+                                          "images/sellbanner.webp")),
+                                )),
+
+                            // TextButton(
+                            //     onPressed: () async {
+                            //       FirebaseAuth.instance.signOut();
+                            //       SharedPreferences prefs =
+                            //           await SharedPreferences.getInstance();
+                            //       await prefs.remove('isLoggedIn');
+                            //       Navigator.push(
+                            //           context,
+                            //           MaterialPageRoute(
+                            //               builder: (context) => const LoginPage()));
+                            //     },
+                            //     child: Text("hhhhh"))
+                          ],
+                        ),
+                      ),
+                    )),
       floatingActionButton: ref.read(userTypeProvider) == "Customer"
           ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -117,6 +117,8 @@ class _RegisterState extends ConsumerState<Register> {
     } else {
       var collectionreference = FirebaseFirestore.instance
           .collection("No. of Users")
+          .doc(emailcontroller.text)
+          .collection(userType)
           .doc(emailcontroller.text + userType);
       print(
           "user doesnt Exists......................................................");
@@ -127,6 +129,12 @@ class _RegisterState extends ConsumerState<Register> {
               "password": passwordcontroller.text,
               "name": namecontroller.text,
               "image": ""
+            }).then((value) async {
+              print(
+                  "...........................................................");
+
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Home()));
             })
           : ref.read(userTypeProvider) == "Shop_Owner"
               ? collectionreference.set({
@@ -140,6 +148,12 @@ class _RegisterState extends ConsumerState<Register> {
                   "city": city,
                   "state": state,
                   "image": ""
+                }).then((value) async {
+                  print(
+                      "...........................................................");
+
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const Home()));
                 })
               : ref.read(userTypeProvider) == "Self_Service"
                   ? collectionreference.set({
@@ -151,6 +165,14 @@ class _RegisterState extends ConsumerState<Register> {
                       "city": city,
                       "state": state,
                       "image": ""
+                    }).then((value) async {
+                      print(
+                          "...........................................................");
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Home()));
                     })
                   : collectionreference.set({
                       "email": emailcontroller.text,
@@ -443,7 +465,8 @@ class _RegisterState extends ConsumerState<Register> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 25.0),
                                           child: TextField(
-                                            controller: namecontroller,
+                                            controller: phonecontroller,
+                                            keyboardType: TextInputType.phone,
                                             decoration: InputDecoration(
                                                 prefixIcon: const Icon(
                                                   Icons.phone,
@@ -473,7 +496,7 @@ class _RegisterState extends ConsumerState<Register> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 25.0),
                                           child: TextField(
-                                            controller: phonecontroller,
+                                            controller: addresscontroller,
                                             decoration: InputDecoration(
                                                 prefixIcon: const Icon(
                                                   Icons.phone_android_outlined,
@@ -653,7 +676,7 @@ class _RegisterState extends ConsumerState<Register> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 25.0),
                                           child: TextField(
-                                            controller: namecontroller,
+                                            controller: phonecontroller,
                                             decoration: InputDecoration(
                                                 prefixIcon: const Icon(
                                                   Icons.phone,

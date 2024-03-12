@@ -56,6 +56,8 @@ class _MainDrawerState extends ConsumerState<MainDrawer> {
     return Drawer(
         child: FutureBuilder<DocumentSnapshot>(
             future: users
+                .doc(ref.read(emailProvider).toString())
+                .collection(ref.read(userTypeProvider).toString())
                 .doc(ref.read(emailProvider).toString() +
                     ref.read(userTypeProvider).toString())
                 .get(),
@@ -80,14 +82,23 @@ class _MainDrawerState extends ConsumerState<MainDrawer> {
                         'name': data['seller_name'],
                         'help': 'Help Center'
                       }
-                    : data = {
-                        'email': data['email'],
-                        'name': data['name'],
-                        'address': data['address'],
-                        'city': data['city'],
-                        'state': data['state'],
-                        'help': 'Help Center'
-                      };
+                    : ref.read(userTypeProvider).toString() == "Private_Seller"
+                        ? data = {
+                            'email': data['email'],
+                            'name': data['name'],
+                            'address': data['address'],
+                            'city': data['city'],
+                            'state': data['state'],
+                            'help': 'Help Center'
+                          }
+                        : data = {
+                            'email': data['email'],
+                            'name': data['name'],
+                            'address': data['address'],
+                            'city': data['city'],
+                            'state': data['state'],
+                            'help': 'Help Center'
+                          };
 
                 return Column(children: [
                   Container(
